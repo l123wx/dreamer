@@ -9,6 +9,7 @@ import DreamWorld from '@/pages/dreamWorld/DreamWorld'
 import DreamWorldIndex from '@/pages/dreamWorld/DreamWorldIndex'
 import CreateDream from '@/pages/createDream/CreateDream'
 import RecordFinish from '@/pages/createDream/RecordFinish'
+import Setting from '@/pages/setting/Setting'
 
 
 Vue.use(Router)
@@ -50,5 +51,9 @@ export default new Router({
     path: '/CreateDream',
     name: 'CreateDream',
     component: CreateDream
+  }, {
+    path: '/Setting',
+    name: 'Setting',
+    component: Setting
   }]
 })

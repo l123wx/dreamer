@@ -8,11 +8,9 @@
     <dream-world-dialog v-model="admireShow"
                         :showCancelButton="false"
                         :showConfirmButton="false"
-                        style="background-color:#b4a8d5;color:#fff;display: flex;flex-direction: column;">
-      <template v-slot:title>
-        <div style="margin:-.2rem 0 .2rem">赠送星辰并留言</div>
-      </template>
+                        style="background-color:#201624;color:#fff;display: flex;flex-direction: column;">
       <template v-slot:default>
+        <div style="background-color:#b4a8d5;text-align:center;line-height:.9rem;height:.9rem">赠送星辰并留言</div>
         <div class="leaveWord">
           <field v-model="value"
                  type="textarea" 

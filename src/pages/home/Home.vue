@@ -61,7 +61,7 @@ export default {
         'opacity':1,
         'transition':"opacity .4s"
       },
-      //记录梦的栏目 **从数据库拿数据**
+      //记录梦的栏目 
       list: {},
       textOpacity:1,//利用透明度解决字体变换时太突兀的参数
       menuLists: this.$globalData.homeMenu,

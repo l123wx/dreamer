@@ -1,5 +1,5 @@
 
-let token = ''; //Jqx4RGQHcaDTmoFKMIF9fw==
+let token = '1kgkC1i4NL7X4QOE1+5GPA=='; //Jqx4RGQHcaDTmoFKMIF9fw==
 if(localStorage.getItem('token')){
   token =localStorage.getItem('token')
 }
@@ -8,9 +8,9 @@ const url = 'http://mjlr.smtboy.com';
 
 
 // 用户的个人信息
-let userInfo = '';
+let userInfo = {};
 if(localStorage.getItem('userInfo')){
-  userInfo =localStorage.getItem('userInfo')
+  userInfo = JSON.parse(localStorage.getItem('userInfo'))
 }
 //首页梦境栏目数据
 const homeDreamLists = {
@@ -86,7 +86,7 @@ const homeMenu = [
         {
           title: '设置',
           iconCode: '&#xe62e;',
-          path: 'DreamList'
+          path: 'Setting'
         }
       ]
 

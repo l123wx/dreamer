@@ -1,20 +1,11 @@
 <template>
-  <div class="login">
+  <div class="phoneSetting">
     <div>
       <div class="input">
         <span class="iconfont">&#xe660;</span>
         <input type="text" @click="phoneInputClick"
                            @blur="phoneInputBlur"
                            v-model.lazy="phone" 
-                           maxlength="11" />
-      </div>
-    </div>
-    <div v-show="pageType=='register'">
-      <div class="input">
-        <span class="iconfont">&#xe65b;</span>
-        <input type="text" @click="usernameInputClick"
-                           @blur="usernameInputBlur"
-                           v-model.lazy="username" 
                            maxlength="11" />
       </div>
     </div>
@@ -28,39 +19,24 @@
         <div class="button" @click="sendCodeClick">{{codeBtn}}</div>
       </div>
     </div>
-    <div class=button @click="login_or_register">{{pageType=='register'?'注册':'登陆'}}</div>
-    <div class="switch_btn">
-      <span @click="typeSwitch">立即{{pageType=='register'?'登陆':'注册'}}</span>
-    </div>
+    <div class=button @click="confirm">确定</div>
   </div>
 </template>
 
 <script>
-import { Dialog ,Toast , Notify } from 'vant'
-import { check_user_phone,log_or_reg,get_auth_code  } from '@/assets/javaScript/_axios'
+import { check_user_phone,get_auth_code,change_phone  } from '@/assets/javaScript/_axios'
+import { Dialog,Toast,Notify } from 'vant'
 export default {
-  name: 'login',
+  name: 'SettingPhone',
   data () {
     return {
       phone:'请输入手机号码',
       code:'请输入验证码',
       time:0,
       codeBtn:'发送验证码',
-      username:'请输入用户名',
-      pageType:'login',
     }
   },
-  methods:{
-    usernameInputClick() {
-      if(this.username == '请输入用户名'){
-        this.username = '';
-      }
-    },
-    usernameInputBlur(){
-      if(this.username == ''){
-        this.username = '请输入用户名';
-      }
-    },
+  methods: {
     phoneInputClick() {
       if(this.phone == '请输入手机号码'){
         this.phone = '';
@@ -89,7 +65,6 @@ export default {
           Notify({ type: 'success', message: '验证码已发送到您的手机，请注意查收' });
           this.time = 60;
           this.codeBtn = this.time+"S" //提前修改秒数，提高体验感
-          // 验证码倒计时    
           let codeTime = setInterval(() => {
             this.time-=1;
             this.codeBtn = this.time+"S"
@@ -104,56 +79,39 @@ export default {
       })
     },
     sendCodeClick() {
-      if( this.time == 0  && (this.phone+'').length == 11){       
-        check_user_phone({
-          phone:this.phone*1
-        }).then((res)=>{
-          if(this.pageType == 'register'){  //注册
+      if( this.time == 0  && (this.phone+'').length == 11){  
+        if( this.phone == this.$globalData.userInfo.phone ){
+          Dialog({message:'请输入新的手机号码'})
+        }else{
+          check_user_phone({
+            phone:this.phone*1
+          }).then((res)=>{
             if(res.status == 1){
               Dialog.alert({
-                message: '手机号已注册！'
+                message: res.msg
               }).then(() => {});
             }else{
               this.sendCode();
             }
-          }else{ //登陆
-            if(res.status == 0){
-              Dialog.alert({
-                message: '手机号未注册！'
-              }).then(() => {});
-            }else{
-              this.sendCode();
-            }
-          }
-        })
+          })
+        }
       }
     },
-    typeSwitch(){
-      if(this.pageType == 'login'){
-        this.pageType = 'register';
-      }else{
-        this.pageType = 'login';
-      }
-    },
-    login_or_register() {
+    confirm(){
       if( this.code == '请输入验证码' ){
-        Notify({ type: 'danger', message: '请输入验证码' });
+        Dialog({message:'请输入验证码'})
       }else{
-        log_or_reg({
+        change_phone({
           phone: this.phone,
           code: this.code ,
-          username:this.pageType=='register'?this.username:''
         }).then(res=>{
-          if(res.status == 0){
+          if(res.success == true){
             Toast.clear();
-            Toast.success((this.pageType=='login'?'登陆':'注册')+'成功');
-            localStorage.setItem('token',res.data.token);
-            localStorage.setItem('userInfo',JSON.stringify(res.data));
-            this.$globalData.userInfo = JSON.stringify(res.data);
+            Toast.success('更换成功');
+            this.$globalData.userInfo.phone = this.phone;
             console.log(res.data)
-            this.$router.push('/home')
           }else{
-            Notify({ type: 'danger', message: res.msg });
+            Dialog({message:res.data})
           }
         })
       }
@@ -163,11 +121,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
-  .login{
-
-  }
-  .login>div:nth-child(2){
-    margin-top: .32rem;
+  .phoneSetting{
+    text-align: center;
+    margin-top: .9rem;
   }
   .input{
     position: relative;
@@ -213,7 +169,7 @@ export default {
     line-height: .72rem;
     border-radius:.6rem;
   }
-  .login>.button{
+  .phoneSetting>.button{
     width:5.56rem;
     height:.82rem;
     background-color: #b4a8d5;
@@ -222,12 +178,5 @@ export default {
     font-size: .36rem;
     border-radius: .5rem;
     line-height: .82rem;
-  }
-  .switch_btn{
-    width: 5rem;
-    text-align: right;
-    margin:.5rem auto;
-    color:#fff;
-    font-size: .24rem;
   }
 </style>
