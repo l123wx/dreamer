@@ -1,0 +1,58 @@
+/*小米8*/
+@media only screen and (max-width:393px) and (max-height:780px){
+  html{
+    font-size: 53px;
+  }
+}
+
+
+@media only screen and (max-width:401px){
+  html{
+    font-size: 53px;
+  }
+}
+@media only screen and (max-width:391px){
+  html{
+    font-size: 52px;
+  }
+}
+@media only screen and (max-width:381px){
+  html{
+    font-size: 51px;
+  }
+}
+@media only screen and (max-width:371px){
+  html{
+    font-size: 49px;
+  }
+}
+@media only screen and (max-width:361px){
+  html{
+    font-size: 48px;
+  }
+}
+@media only screen and (max-width:351px){
+  html{
+    font-size: 47px;
+  }
+}
+@media only screen and (max-width:341px){
+  html{
+    font-size: 45px;
+  }
+}
+@media only screen and (max-width:331px){
+  html{
+    font-size: 44px;
+  }
+}
+@media only screen and (max-width:321px){
+  html{
+    font-size: 43px;
+  }
+}
+@media only screen and (max-width:316px){
+  html{
+    font-size: 42px;
+  }
+}
