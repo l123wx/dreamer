@@ -10,12 +10,9 @@
 
       <!-- 账号设置页 -->
       <account-settings v-show="settingPage==1" 
-                        @phoneClick="settingPage=11"
-                        @usernameClick="settingPage=12"/>
+                        @phoneClick="settingPage=11"/>
         <!-- 修改手机号码页 -->
         <setting-phone v-show="settingPage==11" />
-        <!-- 修改用户名页 -->
-        <setting-user-name v-show="settingPage==12" />
       
       <!-- 意见反馈 -->
       <feedback v-show="settingPage==2"/>
@@ -32,7 +29,6 @@ import SettingHeader from './components/Header'
 import SettingIndex from './components/SettingIndex'
 import AccountSettings from './components/AccountSettings'
 import SettingPhone from './components/SettingPhone'
-import SettingUserName from './components/SettingUserName'
 import Feedback from './components/Feedback'
 import aboutUs from './components/aboutUs'
 export default {
@@ -57,7 +53,6 @@ export default {
     SettingIndex,
     AccountSettings,
     SettingPhone,
-    SettingUserName,
     Feedback,
     aboutUs
   },

@@ -123,9 +123,10 @@ export default {
     }
   },
   mounted(){
-    // console.log(this.$globalData.userInfo)
-    if(this.$globalData.userInfo)
-      this.starNum = JSON.parse(this.$globalData.userInfo).starsCount;
+    console.log(this.$globalData.userInfo)
+    if(this.$globalData.userInfo){
+      this.starNum = this.$globalData.userInfo.starsCount;
+    }
     this.list = this.$globalData.homeDreamLists;
     this.title = this.list[0].title;
     this.title_sec = this.list[0].title_sec

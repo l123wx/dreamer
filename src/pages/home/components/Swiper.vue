@@ -23,10 +23,7 @@ export default {
   name: 'HomeSwiper',
   props: {
     list: {
-      type: Object,
-      default () {
-        return this.$globalData.homeDreamLists
-      } 
+      type: Object
     }
   },
   data () {

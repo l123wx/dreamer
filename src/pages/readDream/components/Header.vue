@@ -2,10 +2,7 @@
   <div class="header">
     <span class="iconfont back_btn"
           @click="back_click" >&#xe622;</span>
-    {{pageType=='create'?'记录梦境':'梦境游记'}}
-    <span class="iconfont send_btn"
-          @click="create_dream" 
-          v-if="pageType=='create'">&#xe638;</span>
+    记录梦境
   </div>
 </template>
 
@@ -18,16 +15,11 @@ export default {
     }
   },
   props: {
-    pageType: {
-      type:String
-    }
+   
   },
   methods: {
     back_click() {
       this.$router.go(-1);
-    },
-    create_dream(){
-      this.$emit('create_dream');
     }
   }
 }

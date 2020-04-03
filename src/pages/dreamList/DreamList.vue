@@ -32,7 +32,7 @@
                   close-on-click-action/>
 
     <!-- 锁定&解锁 弹出菜单 -->
-    <sort-action-sheet v-model="ClockMenuShow" 
+    <clock-action-sheet v-model="ClockMenuShow" 
                   :actions="ClockActions" 
                   @select="clockOnSelect" 
                   cancel-text="取消"
@@ -57,6 +57,7 @@ export default {
     DreamListScroll,
     ViewActionSheet:ActionSheet,
     SortActionSheet:ActionSheet,
+    ClockActionSheet:ActionSheet,
     ScrollContent
   },
   data () {
@@ -180,7 +181,7 @@ export default {
     },
     // 点击创建梦的按钮
     create_dream(){
-      this.$router.push({name:'CreateDream',params:{columnId:this.columnId}})
+      this.$router.push({name:'CreateDream',params:{columnId:this.columnId,type:'create'}})
     },
     // 刷新
     onRefresh(e){

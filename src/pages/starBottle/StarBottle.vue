@@ -1,8 +1,11 @@
 <template>
   <div class="box">
     <star-bottle-header />
-    <star-bottle-item-number @getTickets="getTickets" @getStar="getStar" />
-    <star-bottle-content />
+    <star-bottle-item-number @getTickets="getTickets" 
+                             @getStar="getStar"
+                             :starNbm="starNbm"
+                             :ticketsNbm="ticketsNbm"/>
+    <star-bottle-content :getLists="getLists" :sendLists="sendLists" @onRefresh="onRefresh"/>
 
     <star-bottle-popup v-model="getStarPopup"
                        position="bottom"
@@ -23,7 +26,7 @@
             <div>发布梦境游记</div>
             <div>+2星辰</div>
           </div>
-          <div class>去签到</div>
+          <div @click="toCreateDream">去发布</div>
         </div>
       </div>
     </star-bottle-popup>
@@ -40,10 +43,10 @@
         </div>
         <div class="starNum">
           <div>需支付：<span>1000星辰</span></div>
-          <div>我的：300星辰</div>
+          <div>我的：{{starNbm}}星辰</div>
         </div>
       </div>
-      <div class="button">兑换</div>
+      <div class="button" @click="exchangeTickets">兑换</div>
     </star-bottle-popup>
   </div>
 </template>
@@ -52,7 +55,8 @@
 import StarBottleHeader from './components/Header'
 import StarBottleItemNumber from './components/ItemNumber'
 import StarBottleContent from './components/Content'
-import { Popup } from 'vant'
+import { stars_to_ticket,get_user_info,receive_message,select_send_message } from '@/assets/javaScript/_axios'
+import { Popup,Dialog } from 'vant'
 export default {
   name: 'StarBottle',
   components: {
@@ -64,16 +68,71 @@ export default {
   data () {
     return {
       getStarPopup: false,
-      getTicketsPopup: false
+      getTicketsPopup: false,
+      starNbm:0,
+      ticketsNbm:0,
+      sendLists:[],
+      getLists:[]
     }
   },
   methods: {
     getTickets() {
-      this.getStarPopup = true
+      this.getTicketsPopup = true
     },
     getStar() {
-      this.getTicketsPopup = true
+      this.getStarPopup = true
+    },
+    // 兑换解梦券
+    exchangeTickets(){
+      Dialog.confirm({
+        message: '确定要花费1000星辰兑换1张解梦券吗'
+      }).then(() => {
+        stars_to_ticket({
+        }).then(res=>{
+          Dialog({ message: '兑换成功' });
+          this.$globalData.userInfo = res.data;
+          this.ticketsNbm = res.data.ticketCount;
+          this.starNbm = res.data.starsCount;
+        })
+      }).catch(() => {
+        // on cancel
+      });
+    },
+    toCreateDream() {
+      this.$router.push('/home');
+    },
+    loadReceiveMessage(e){
+      receive_message({
+      }).then(res=>{
+        // console.log(res)
+        this.getLists = res.data;
+        if(e){
+          e.$children[0].isRefresh = false;
+          e.$children[1].isRefresh = false;
+        }
+      })
+    },
+    loadSendMessage(e){
+      select_send_message({})
+      .then(res=>{
+        // console.log(res)
+        this.sendLists = res.data;
+        if(e){
+          e.$children[0].isRefresh = false;
+          e.$children[1].isRefresh = false;
+        }
+      })
+    },
+    onRefresh(e){
+      this.loadReceiveMessage(e);
+      this.loadSendMessage(e)
     }
+  },
+  mounted() {
+    this.starNbm = this.$globalData.userInfo.starsCount;
+    this.ticketsNbm = this.$globalData.userInfo.ticketCount;
+    this.loadReceiveMessage();
+    this.loadSendMessage();
   }
 }
 </script>

@@ -34,11 +34,11 @@ export default {
   props: {
     starNbm: {
       type: Number,
-      default: 1000000
+      default:0
     },
     ticketsNbm: {
       type: Number,
-      default: 0
+      default:0
     }
   },
   methods: {

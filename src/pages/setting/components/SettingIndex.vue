@@ -9,11 +9,11 @@
       <div>
         <div class="username">{{userInfo.username}}</div>
         <div class="motto1" @click="mottoType=1" v-show="!mottoType">
-          <div class="input">{{motto}}</div>
+          <div class="input">{{userInfo.motto}}</div>
           <span class="iconfont">&#xe655;</span>
         </div>
         <div class="motto2" v-show="mottoType">
-          <input maxlength="13" type="text" v-model="motto" />
+          <input maxlength="13" type="text" v-model="userInfo.motto" />
           <span class="iconfont" @click="mottoFinish">&#xe606;</span>
         </div>
       </div>
@@ -77,19 +77,17 @@ const Base64 = require('js-base64').Base64
 import { Dialog,Uploader } from 'vant'
 // 头像裁剪组件来源：https://github.com/xyxiao001/vue-cropper
 import { VueCropper }  from 'vue-cropper'
-import { exit_login,change_user_motto,upload_head_photo } from '@/assets/javaScript/_axios'
+import { exit_login,change_user_motto,upload_head_photo_by_base64 } from '@/assets/javaScript/_axios'
 export default {
   name: 'SettingIndex',
   data () {
     return {
-      avatarFile:{},
       userInfo:{},
       mottoType: 0, // 座右铭状态 0:展示 1：修改中
-      motto: this.$globalData.userInfo.motto,
       avaterDialogShow: false,
       option: {
         img: '',//裁切图片的地址
-        outputSize: 1,//裁剪生成图片的质量 0.1-1
+        outputSize: 0.6,//裁剪生成图片的质量 0.1-1
         outputType: 'jpge',//裁剪生成图片的格式
         fixedBox: true,//固定截图框大小 不允许改变
         canMoveBox: false,//截图框能否拖动
@@ -106,11 +104,10 @@ export default {
     // 修改完成
     mottoFinish() {
       change_user_motto({
-        motto:this.motto
+        motto:this.userInfo.motto
       }).then(res=>{
-        console.log(res)
         let obj = JSON.parse(localStorage.getItem('userInfo'))
-        obj.motto = this.motto;
+        obj.motto = this.userInfo.motto;
         localStorage.setItem('userInfo',JSON.stringify(obj));
         this.mottoType = 0;
       })
@@ -118,21 +115,24 @@ export default {
     // 上传完文件，弹出裁剪弹窗
     afterRead(e) {
       this.option.img = e.content;
-      this.avatarFile = e;
       this.avaterDialogShow = true;
       // this.avatarType = e.type;
+      console.log(e.content)
     },
     // 点击裁剪弹窗的确认按钮
     avatarConfirm(){
       this.$refs.cropper.getCropData((data) => {
         //裁切生成的base64图片
-          this.avatarFile.content = data;
-          console.log(data);
-          // upload_head_photo({
-          //   file:JSON.stringify(this.avatarFile)
-          // }).then(res=>{
-          //   console.log(res)
-          // })
+          // console.log(data);
+          upload_head_photo_by_base64({
+            base64Data:data
+          }).then(res=>{
+            console.log(res)
+            if( res.msg == '头像修改成功' ){
+              this.userInfo.headPhotoUrl = res.data;
+              localStorage.setItem('userInfo',JSON.stringify(this.userInfo));
+            }
+          })
       })
     },
     //账号设置
@@ -166,6 +166,7 @@ export default {
   },
   mounted(){
     this.userInfo = this.$globalData.userInfo;
+    console.log(this.userInfo)
   }
 }
 </script>

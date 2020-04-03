@@ -239,6 +239,19 @@ export function enter_dream_world(options){
     })
   })
 }
+export function read_dream(options){
+  return new Promise((resolve,reject) => {
+    axios({
+        url: '/dream/read_dream.do',
+        method: 'post',
+        data: options
+    }).then(res=>{
+        resolve(res)
+    }).catch(err=>{
+        reject(err)
+    })
+  })
+}
 
 // 调用外部接口获取梦分类
 export function get_dream_column(options){
@@ -380,6 +393,21 @@ export function upload_voice_or_picture(options){
   return new Promise((resolve,reject) => {
     axios({
         url: '/dream/upload_voice_or_picture.do',
+        method: 'post',
+        data: options
+    }).then(res=>{
+        resolve(res)
+    }).catch(err=>{
+        reject(err)
+    })
+  })
+}
+
+// 梦境分词
+export function split_dream(options){
+  return new Promise((resolve,reject) => {
+    axios({
+        url: '/dream/split_dream.do',
         method: 'post',
         data: options
     }).then(res=>{
@@ -614,6 +642,20 @@ export function upload_head_photo(options){
   return new Promise((resolve,reject) => {
     axios({
         url: '/user/upload_head_photo.do',
+        method: 'post',
+        data: options
+    }).then(res=>{
+        resolve(res)
+    }).catch(err=>{
+        reject(err)
+    })
+  })
+}
+
+export function upload_head_photo_by_base64(options){
+  return new Promise((resolve,reject) => {
+    axios({
+        url: '/user/upload_head_photo_by_base64.do',
         method: 'post',
         data: options
     }).then(res=>{

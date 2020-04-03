@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <div class="title">
-      <input type="text" :readonly="!typePage || typePage=='read'" v-model="title" @click="input_click" @blur="input_blur" />
+      <input type="text" v-model="title" @click="input_click" @blur="input_blur" />
     </div>
     <div class="boundary">
       <img src="@/assets/images/dreamWorld/boundary_l.png" />
@@ -17,34 +17,29 @@
              ref="textarea"
              @blur="blur_textarea"
              @focus="focus_textarea"
-             :formatter="formatter"
-             :readonly="!typePage || typePage=='read'"/>
+             :formatter="formatter"/>
     </div>
   </div>
 </template>
 
 <script>
 import { Field } from 'vant'
-import { get_dream_info } from "@/assets/javaScript/_axios"
 export default {
   name: 'Content',
   data () {
     return {
       title:'为梦境起个名字吧',
-      message:'在这里输入输入内容',
-      dreamData:{}
+      message:'在这里输入输入内容'
     }
   },
   components: {
     Field
   },
-  props: {
-    typePage: {
-      type:String
-    },
-    dreamId: {
-      type:Number
-    }
+  props:{
+    // title:{
+    //   type:String,
+    //   default:'为梦境起个名字吧'
+    // }
   },
   methods:{
     focus_textarea(){
@@ -71,21 +66,6 @@ export default {
     formatter(value){
       // 过滤输入的数字
       return value.replace(/\d/g, '');
-    }
-  },
-  mounted(){
-    console.log(this.dreamId)
-    if(this.dreamId){
-      this.title = ''
-      this.message = ''
-      get_dream_info({
-        dreamId:this.dreamId
-      }).then(res=>{
-        // console.log(res)
-        this.dreamData = res.data
-        this.title = res.data.title
-        this.message = res.data.content
-      })
     }
   }
 }

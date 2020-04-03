@@ -18,7 +18,7 @@
 
 <script>
 import { Dialog } from 'vant';
-import { get_user_info,enter_dream_world } from '@/assets/javaScript/_axios'
+import { get_user_info,enter_dream_world,read_dream } from '@/assets/javaScript/_axios'
 export default {
   name: 'DreamWorldIndex',
   data () {
@@ -35,11 +35,11 @@ export default {
           pageNum:1,
           pageSize:5,
         }).then(res=>{
-          console.log(res)
           if(res.msg == "星辰数量不足"){
             Dialog({message:'星辰数量不足'})
           }else{
             this.$router.push("DreamWorld");
+            this.readDream(res.data.list)
           }
         }).catch(err=>{
         })
@@ -55,6 +55,17 @@ export default {
       }).then(res=>{
         localStorage.setItem('userInfo',JSON.stringify(res.data));
         this.$router.push('/home')
+      })
+    },
+    readDream(lists){
+      let dreamIds = [];
+      for(var item in lists){
+        dreamIds.push(lists[item].id)
+      }
+      read_dream({
+        'dreamIds[]':dreamIds
+      }).then(res=>{
+        console.log(res)
       })
     }
   }

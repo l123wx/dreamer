@@ -4,8 +4,9 @@
       <div v-if="!lists.length" class="tipOfNone">该梦境还没有梦噢</div>
       <!-- 卡片视图 -->
       <div v-for="(item,index) in lists"
-           :key="index" 
-           class="dream_box">
+           :key="index"
+           class="dream_box"
+           @click="dreamListClick(item.id)">
         <div class="title">{{item.title}}</div>
         <div class="iconfont">
           <img v-if="!item.pictureCount && !item.voiceCount" src="@/assets/images/star.png" />
@@ -63,7 +64,10 @@ export default {
     }
   },
   methods: {
-    
+    dreamListClick(e){
+      // console.log(e)
+      this.$router.push({name:'CreateDream',params:{type:'read',dreamId:e}})
+    }
   }
 }
 </script>
@@ -116,12 +120,12 @@ export default {
     font-size: .24rem;
     line-height: .32rem;
     margin:.12rem 0;
-    min-height: 1.56rem;
+    min-height: 1.28rem;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 5;
     overflow: hidden;
-    text-align: center;
+    /*text-align: center;*/
   }
   .cardView .footer{
     bottom:0;

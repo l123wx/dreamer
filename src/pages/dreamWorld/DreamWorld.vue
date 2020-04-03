@@ -39,7 +39,7 @@
 import DreamWorldHeader from './components/Header'
 import DreamWorldSwiper from './components/Swiper'
 import { Dialog,Field,Notify,Toast } from 'vant'
-import { enter_dream_world,send_message,send_comment } from '@/assets/javaScript/_axios.js'
+import { enter_dream_world,send_message,send_comment,read_dream } from '@/assets/javaScript/_axios.js'
 import axios from 'axios'
 export default { 
   name: 'DreamWorld',
@@ -115,7 +115,6 @@ export default {
     },
     //点击最后的继续探梦按钮
     addDream(){
-      this.pageNum ++;
       if(this.addIf == 0){
         Dialog.alert({
           message: '哦豁！已经没有梦啦，下次再来吧'
@@ -157,21 +156,37 @@ export default {
         pageNum:this.pageNum,
         pageSize:5,
       }).then(res=>{
-        console.log(res)
-        if( this.lists.length ){
-          const newArr = [ ...this.lists, ...res.data.list] //合并两个数组
-          this.lists = newArr;
+        if(res.msg == "星辰数量不足"){
+          Dialog({message:'星辰数量不足'})
         }else{
-          this.lists = res.data.list
+          console.log(res)
+          if( this.lists.length ){
+            const newArr = [ ...this.lists, ...res.data.list] //合并两个数组
+            this.lists = newArr;
+          }else{
+            this.lists = res.data.list
+          }
+          if(res.data.nextPage || res.data.nextPage == res.data.lastPage || !res.data.hasNextPage){
+            this.addIf = 0;
+          }
+          this.checkStarType(this.dreamIndex);
+          this.readDream(res.data.list)
+          res.data.list = this.lists;
+          localStorage.setItem('dreamWorldData',JSON.stringify(res.data));
         }
-        if(res.data.nextPage == res.data.lastPage || !res.data.hasNextPage){
-          this.addIf = 0;
-        }
-        this.checkStarType(this.dreamIndex);
-        res.data.list = this.lists;
-        localStorage.setItem('dreamWorldData',JSON.stringify(res.data));
       }).catch(err=>{
         console.log(err)
+      })
+    },
+    readDream(lists){
+      let dreamIds = [];
+      for(var item in lists){
+        dreamIds.push(lists[item].id)
+      }
+      read_dream({
+        'dreamIds[]':dreamIds
+      }).then(res=>{
+        console.log(res)
       })
     }
   },
@@ -181,7 +196,6 @@ export default {
       this.loadDream()
     }else{
       this.lists = JSON.parse(localStorage.getItem('dreamWorldData')).list
-      this.pageNum = JSON.parse(localStorage.getItem('dreamWorldData')).pageNum
     } 
   },
   watch:{
@@ -201,6 +215,9 @@ export default {
   }
   .leaveWord{
     background-color: #201624;
+  }
+  .leaveWord >>> textarea{
+    color: #dcdcdc;
   }
   .leaveWord>div{
     background-color: transparent;

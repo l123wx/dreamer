@@ -1,5 +1,5 @@
 
-let token = '1kgkC1i4NL7X4QOE1+5GPA=='; //Jqx4RGQHcaDTmoFKMIF9fw==
+let token = ''; //tK2DARUWraEiJ02rLtWWQQ==  1kgkC1i4NL7X4QOE1+5GPA==
 if(localStorage.getItem('token')){
   token =localStorage.getItem('token')
 }
@@ -76,7 +76,7 @@ const homeMenu = [
         {
           title: '解梦所',
           iconCode: '&#xe62d;',
-          path: 'DreamList'
+          path: 'RevealDreamIndex'
         },
         {
           title: '系统公告',

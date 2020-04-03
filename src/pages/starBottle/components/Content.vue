@@ -7,27 +7,27 @@
    
     <!-- 收到的星辰 -->
     <div v-show="pageType=='get'" class="get">
-      <content-scroll>
+      <content-scroll @onRefresh="onRefresh">
         <div class="getContentBox">
-          <div class="list" v-for="(item,index) in sendLists" :key="index">
+          <div class="list" v-for="item in getLists" :key="item.id">
             <!-- 梦境名称和时间 -->
             <div class="title">
               <div>
-                <span>【<span>{{item.title}}</span>】</span>收到一颗星辰
+                <span @click="readMyDream(item.dreamId)">【<span>{{item.dreamTitle}}</span>】</span>收到一颗星辰
               </div>
-              <div>{{item.time}}</div>
+              <div>{{item.createTime | yyyy.mm.dd}}</div>
             </div>
             <div class="content">
               <!-- 头像 -->
               <div class="avatar">
-                <img src="@/assets/images/index/photo_1.png" />
+                <img :src="item.headPhotoUrl" />
               </div>
               <!-- 昵称&留言 -->
               <div>
                 <!-- 昵称 -->
-                <div>{{item.name}}</div>
+                <div>{{item.username}}</div>
                 <!-- 留言 -->
-                <div>{{item.sentence}}</div>
+                <div>{{item.content}}</div>
               </div>
             </div>
           </div>
@@ -36,21 +36,21 @@
     </div>
     <!-- 送出的星辰 -->
     <div v-show="pageType=='send'" class="send">
-      <content-scroll>
+      <content-scroll @onRefresh="onRefresh">
         <div class="sendContentBox">
-          <div class="list" v-for="(item,index) in getLists" :key="index">
+          <div class="list" v-for="item in sendLists" :key="item.id">
             <!-- 星星标 -->
             <div>
               <span class="iconfont">&#xe62f;</span>
             </div>
             <!-- 内容 -->
             <div>
-              <div class='title'>送给<span>【<span>{{item.name}}</span>】</span>一颗星辰</div>
-              <div class='sentence'>“<span>{{item.sentence}}</span>”</div>
+              <div class='title'>送给<span @click="readOthersDream(item.dreamId)">【<span>{{item.dreamTitle}}</span>】</span>一颗星辰</div>
+              <div class='sentence'>“<span>{{item.content}}</span>”</div>
             </div>
             <!-- 时间 -->
             <div class="time">
-              {{item.time}}
+              {{item.createTime | yyyy.mm.dd}}
             </div>
           </div>
         </div>
@@ -73,40 +73,10 @@ export default {
   },
   props: {
     getLists: {
-      type: Object,
-      default() {
-        return {
-          '0': {
-            name:'沙漠之旅1',
-            sentence:'这个梦都可以1123123123短篇小说了！',
-            time:'2020.03.13'
-          },
-          '2': {
-            name:'沙漠之旅1',
-            sentence:'这个梦都可以1123123123短篇小说了！',
-            time:'2020.03.13'
-          }
-        }
-      }
+      type: Array
     },
     sendLists: {
-      type: Object,
-      default() {
-        return {
-          '0': {
-            title:'沙漠之旅1',
-            name: '用户1',
-            sentence:'这个梦都可以1123123123短篇小说了！',
-            time:'2020.03.13'
-          },
-          '1': {
-            title:'沙漠之旅1',
-            name: '用户1',
-            sentence:'看完我笑到肚子疼哈哈哈，怎么这么逗,我也不知道呢，真厉害，我觉得你是个不可多得的做梦人才，来跟我一起学做梦吧！',
-            time:'2020.03.13'
-          }
-        }
-      }
+      type: Array
     }
   },
   methods: {
@@ -115,6 +85,15 @@ export default {
     },
     activeSend() {
       this.pageType = 'send'
+    },
+    onRefresh(){
+      this.$emit('onRefresh',this);
+    },
+    readMyDream(dreamId){
+      this.$router.push({name:'CreateDream',params:{type:'read',dreamId:dreamId}})
+    },
+    readOthersDream(dreamId){
+      this.$router.push({name:'CreateDream',params:{type:'',dreamId:dreamId}})
     }
   }
 }
@@ -266,7 +245,7 @@ export default {
   /*留言*/
   .get .content>div:nth-child(2)>div:nth-child(2){
     font-size: .26rem;
-    width:5.08rem;
+    width:4.9rem;
     margin: .18rem 0 .2rem 0;
     line-height: .36rem;
   }

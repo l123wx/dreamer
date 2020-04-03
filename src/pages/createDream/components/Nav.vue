@@ -1,28 +1,48 @@
 <template>
   <div class="nav">
-    <div>
+    <div v-if="typePage && typePage=='create'">
       <span class="iconfont" @click="click_btn1"></span>
       <span class="iconfont" @click="click_btn2"></span>
       <span class="iconfont" @click="click_btn3">&#xe63b;</span>
     </div>
-<!--     <div>
+    <div v-if="typePage && typePage=='read'">
       <span class="iconfont" @click="revise_dream">&#xe655;</span>
       <span class="iconfont" @click="clock_dream">&#xe639;</span>
       <span class="iconfont" @click="move_dream">&#xe65e;</span>
       <span class="iconfont" @click="del_dream">&#xe65f;</span>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-import { del_dream,change_single_dream_column,locked_single_dream } from '@/assets/javaScript/_axios.js'
-import { Popup,Dialog  } from 'vant'
+import { del_dream,change_single_dream_column } from '@/assets/javaScript/_axios.js'
+import { Popup,Dialog,ActionSheet,Notify } from 'vant'
 export default {
   name: 'Nav',
   data () {
     return {
-
+       ClockMenuShow: false,
+       ClockActions: [
+        { name: '锁定这个梦' },
+        { name: '解锁这个梦' },
+      ],
     }
+  },
+  props:{
+    buttonShow:{
+      type: Boolean,
+      default: false
+    },
+    typePage: {
+      type:String
+    },
+    dreamId: {
+      type: Number
+    }
+  },
+  components:{
+    NPopup:Popup,
+    ClockActionSheet:ActionSheet,
   },
   methods: {
     click_btn1() {
@@ -36,34 +56,36 @@ export default {
     },
     // 修改梦
     revise_dream(){
-
+      this.$emit("revise_dream");
     },
     // 锁定&解锁梦
     clock_dream(){
-
+      this.$emit("clock_dream");
     },
     // 移动梦
     move_dream(){
-      change_single_dream_column({
-        // type  
-        // dreamId
-      })
+      this.$emit("move_dream");
     },
     // 删除梦
     del_dream(){
-      del_dream({
-        // dreamId
-      })
+      Dialog.confirm({
+        message: '确定要删除这个梦吗'
+      }).then(() => {
+        del_dream({
+          dreamId:this.dreamId
+        }).then(res=>{
+          console.log(res)
+          if( res.data == '删除成功' ){
+            Notify({ type: 'success', message: '已删除'});
+
+          }else{
+            Notify({ type: 'danger', message: '操作失败，请重试'});
+          }
+        })
+      }).catch(() => {
+        // on cancel
+      });
     }
-  },
-  props:{
-    buttonShow:{
-      type: Boolean,
-      default: false
-    }
-  },
-  components:{
-    NPopup:Popup
   }
 }
 </script>

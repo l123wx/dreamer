@@ -5,7 +5,16 @@
   }
 }
 
-
+@media only screen and (max-width:421px){
+  html{
+    font-size: 55px;
+  }
+}
+@media only screen and (max-width:411px){
+  html{
+    font-size: 54px;
+  }
+}
 @media only screen and (max-width:401px){
   html{
     font-size: 53px;
@@ -18,7 +27,7 @@
 }
 @media only screen and (max-width:381px){
   html{
-    font-size: 51px;
+    font-size: 50px;
   }
 }
 @media only screen and (max-width:371px){
