@@ -184,7 +184,7 @@ export default {
       this.$router.push({name:'CreateDream',params:{columnId:this.columnId,type:'create'}})
     },
     // 刷新
-    onRefresh(e){
+    onRefresh(){
       get_dream_list({
         columnId:this.columnId
       }).then(res=>{
@@ -223,6 +223,7 @@ export default {
       this.lists = data.lists;
       this.columnId = data.columnId;
     }
+    this.onRefresh();
   }
 }
 </script>

@@ -106,9 +106,10 @@ export default {
       change_user_motto({
         motto:this.userInfo.motto
       }).then(res=>{
-        let obj = JSON.parse(localStorage.getItem('userInfo'))
-        obj.motto = this.userInfo.motto;
-        localStorage.setItem('userInfo',JSON.stringify(obj));
+        // let obj = JSON.parse(localStorage.getItem('userInfo'))
+        // obj.motto = this.userInfo.motto;
+        // localStorage.setItem('userInfo',JSON.stringify(obj));
+        this.$globalData.userInfo.motto = this.userInfo.motto
         this.mottoType = 0;
       })
     },

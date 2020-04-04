@@ -4,11 +4,8 @@
       <span class="iconfont" @click="backClick">&#xe650;</span>
       自动解梦
     </div>
-    <auto-reveal-content v-if="!pageIndex" @startReveal="startReveal" />
-    <auto-reveal-result v-if="pageIndex" :dreamId="dreamId" />
-
-    
-    
+    <auto-reveal-content v-if="!pageIndex" @startReveal="startReveal" @listClick="listClick" />
+    <auto-reveal-result v-if="pageIndex" :dreamId="dreamId" :dreamTitle="dreamTitle" />
   </div>
 </template>
 
@@ -21,7 +18,8 @@ export default {
   data () {
     return {
       pageIndex:0,
-      dreamId:-1
+      dreamId:-1,
+      dreamTitle: '一个奇妙的梦'
     }
   },
   components: {
@@ -32,14 +30,16 @@ export default {
     backClick(){
       this.$router.push('RevealDreamIndex')
     },
-    startReveal(e){
-      console.log(e)
-      if(e == -1){
+    startReveal(){
+      if(this.dreamId == -1){
         Dialog({message:'请选择要解的梦'})
       }else{
-        this.dreamId = e;
         this.pageIndex = 1;
       }
+    },
+    listClick(id,title){
+      this.dreamId = id;
+      this.dreamTitle = title
     }
   }
 }

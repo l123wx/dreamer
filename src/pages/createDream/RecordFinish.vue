@@ -31,7 +31,7 @@
 
 <script>
 let that;
-import { locked_single_dream } from '@/assets/javaScript/_axios.js'
+import { locked_single_dream,get_user_info } from '@/assets/javaScript/_axios.js'
 import { Switch,Dialog,Notify } from 'vant';
 export default {
   name: 'RecordFinish',
@@ -87,6 +87,13 @@ export default {
       location.hash = '/home';
     }
   },
+  mounted() {
+    get_user_info({})
+    .then(res=>{
+      // console.log(res)
+      this.$globalData.userInfo = res.data
+    })
+  }
 }
 </script>
 

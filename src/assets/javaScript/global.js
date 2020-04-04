@@ -1,5 +1,5 @@
 
-let token = ''; //tK2DARUWraEiJ02rLtWWQQ==  1kgkC1i4NL7X4QOE1+5GPA==
+let token = '1kgkC1i4NL7X4QOE1+5GPA=='; //tK2DARUWraEiJ02rLtWWQQ==  
 if(localStorage.getItem('token')){
   token =localStorage.getItem('token')
 }
@@ -9,9 +9,9 @@ const url = 'http://mjlr.smtboy.com';
 
 // 用户的个人信息
 let userInfo = {};
-if(localStorage.getItem('userInfo')){
-  userInfo = JSON.parse(localStorage.getItem('userInfo'))
-}
+// if(localStorage.getItem('userInfo')){
+//   userInfo = JSON.parse(localStorage.getItem('userInfo'))
+// }
 //首页梦境栏目数据
 const homeDreamLists = {
         '0': {

@@ -9,11 +9,11 @@
     <div class="numbers">
       <div>
         <img src="@/assets/images/star.png" />
-        100
+        {{this.$globalData.userInfo.starsCount}}
       </div>
       <div>
         <img src="@/assets/images/tickets.png" />
-        100
+        {{this.$globalData.userInfo.ticketCount}}
       </div>
     </div>
 

@@ -89,10 +89,14 @@ export default {
       }).then(() => {
         stars_to_ticket({
         }).then(res=>{
-          Dialog({ message: '兑换成功' });
-          this.$globalData.userInfo = res.data;
-          this.ticketsNbm = res.data.ticketCount;
-          this.starNbm = res.data.starsCount;
+          if(res.msg == '星辰不足，无法兑换'){
+            Dialog({ message: res.msg });
+          }else{
+            Dialog({ message: '兑换成功' });
+            this.$globalData.userInfo = res.data;
+            this.ticketsNbm = res.data.ticketCount;
+            this.starNbm = res.data.starsCount;            
+          }
         })
       }).catch(() => {
         // on cancel

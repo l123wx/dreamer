@@ -77,7 +77,7 @@ export default {
           console.log(res)
           if( res.data == '删除成功' ){
             Notify({ type: 'success', message: '已删除'});
-
+            this.$router.go(-1)
           }else{
             Notify({ type: 'danger', message: '操作失败，请重试'});
           }

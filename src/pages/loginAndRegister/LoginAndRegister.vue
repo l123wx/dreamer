@@ -23,12 +23,13 @@ export default {
   },
   mounted(){
     if(this.$globalData.token){
+      alert(this.$globalData.token)
       auto_login({
       }).then(res=>{
         console.log(res)
         if(res.status == 0){
-          localStorage.setItem('userInfo',JSON.stringify(res.data));
-          this.$globalData.userInfo = JSON.stringify(res.data);
+          // localStorage.setItem('userInfo',JSON.stringify(res.data));
+          this.$globalData.userInfo = res.data
           this.$router.push('home')
         }
       })

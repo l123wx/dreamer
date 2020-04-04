@@ -4,6 +4,8 @@
       <div><span>梦见</span>{{item.title}}</div>
       <p>{{item.des}}</p>
     </div>
+    <div v-show="!lists" class="list notFound">未查询到相关信息</div>
+    <div class="list" style="background-color:transparent;"></div>
   </div>
 </template>
 
@@ -31,7 +33,7 @@ export default {
 <style lang="css" scoped>
   .box{
     max-height: 100%;
-    overflow: auto;
+    overflow: auto !important;
   }
   .list{
     /*height: 1.37rem;*/
@@ -63,5 +65,9 @@ export default {
   }
   .list p{
     color: #dadada;
+  }
+  .notFound{
+    text-align: center;
+    color: #909090;
   }
 </style>

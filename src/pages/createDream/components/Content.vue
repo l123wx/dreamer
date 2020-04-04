@@ -12,6 +12,7 @@
       <field v-model="message" 
              type="textarea"
              autosize
+             autofocus
              size="100"
              class="textarea"
              ref="textarea"
@@ -74,7 +75,7 @@ export default {
     }
   },
   mounted(){
-    console.log(this.dreamId)
+    console.log(this.typePage)
     if(this.dreamId){
       this.title = ''
       this.message = ''

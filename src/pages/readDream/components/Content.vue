@@ -12,6 +12,7 @@
       <field v-model="message" 
              type="textarea"
              autosize
+             autofocus
              size="100"
              class="textarea"
              ref="textarea"

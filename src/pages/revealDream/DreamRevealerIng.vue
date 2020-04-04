@@ -14,6 +14,7 @@
       <field
         v-model="message"
         :autosize="true"
+        autofocus
         type="textarea"
         class="input"
         placeholder="你有什么想告诉解梦师的吗？你可以分享一下生活背景、感情状况、近期遭遇，尽量清晰的描述可以获得更好的解答。"/>
@@ -44,17 +45,16 @@ export default {
     backClick() {
       this.$router.go(-1)
     },
-    startReveal(e){
-      console.log(e)
-      if(e == -1){
+    startReveal(){
+      // console.log(this.dreamId)
+      if(this.dreamId == -1){
         Dialog({message:'请选择要解的梦'})
       }else{
-        this.show = true;
-        this.dreamId = e;
+        this.show = true; //显示解梦备注框
       }
     },
-    listClick() {
-      this.show = true;
+    listClick(dreamId) {
+      this.dreamId = dreamId;
     },
     confirmClick(){
       Dialog.confirm({
@@ -65,7 +65,7 @@ export default {
           dreamId:this.dreamId,
           content:this.message
         }).then(res=>{
-          if(res.msg != "解梦券数量不足"){
+          if(res.msg == "解梦券数量不足"){
             Dialog({message:'解梦券数量不足'})
           }else{
             this.$router.push('/RevealDreamLetter')

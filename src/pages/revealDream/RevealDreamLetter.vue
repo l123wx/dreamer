@@ -8,7 +8,9 @@
     </div>
     
     <div class="letter_box">
-       <letter-list v-for="(item,index) in 10" :key="item.index"/>
+       <letter-list v-for="item in letterList" 
+                    :key="item.id"
+                    :data="item"/>
     </div>
   </div>
 </template>
@@ -20,7 +22,7 @@ export default {
   name: 'RevealDreamLetter',
   data () {
     return {
-
+      letterList:[]
     }
   },
   components: {
@@ -35,7 +37,7 @@ export default {
     dream_master_message({
 
     }).then(res=>{
-      console.log(res)
+      this.letterList = res.data
     })
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <search-header @SearchClick="SearchClick"/>
-    <classify-dropdown-menu @firstClassifyClick="firstClassifyClick" @childClassifyClick="childClassifyClick"/>
+    <classify-dropdown-menu  ref="ClassifyMenu" @firstClassifyClick="firstClassifyClick" @childClassifyClick="childClassifyClick"/>
     <div style="height:calc(100vh - 2.4rem)">
       <reveal-lists :lists="revealDreamList" @listClick="listClick"/>
     </div>
@@ -33,6 +33,8 @@ export default {
       revealDreamList: [],
       dreamDialogData:{},
       value:'',
+      firstClassifyId:0,
+      childClassifyId:0
     }
   },
   components: {
@@ -49,29 +51,41 @@ export default {
       reveal_dream_detail({
         id:e
       }).then(res=>{
-        console.log(res)
+        // console.log(res)
         this.dreamDialogData = res.data.result;
         this.dreamDialogshow = true;
       })
     },
     SearchClick(val){
+      console.log(this)
+      this.$refs.ClassifyMenu.firstActiveIndex = 0;
+      this.$refs.ClassifyMenu.firstTitle = '全部父类'
       this.value = val;
       this.revealDream(val)
     },
     revealDream(val,cid,full){
-      reveal_dream({
-        q:encodeURIComponent(val),
-        cid:cid,
-        full:full
-      }).then(res=>{
-        console.log(res)
-        this.revealDreamList = res.data.result
-      })
+      if( val != '' ){
+        reveal_dream({
+          q:encodeURIComponent(val),
+          cid:cid,
+          full:0
+        }).then(res=>{
+          // console.log(res)
+          this.revealDreamList = res.data.result
+        })
+      }
     },
     firstClassifyClick(id){
-      
+      this.firstClassifyId = id;
+      this.revealDream(this.value,id)
     },
     childClassifyClick(id){
+      if( id == 0 ){
+        revealDream(this.value,this.firstClassifyId);
+        console.log("子类选全部，用父类的去查")
+      }else{
+        this.revealDream(this.value,id)
+      }
       
     }
   },

@@ -29,7 +29,7 @@ export default {
   },
   created(){
     setTimeout(function() {
-      // that.$router.push("/home");
+      that.$router.push("/loginAndRegister");
     },3000)
   },
   computed:{

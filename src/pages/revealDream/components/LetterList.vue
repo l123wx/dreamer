@@ -1,15 +1,15 @@
 <template>
   <div :class="['letter_list',active?'active':'']">
-    <p class="title">【一个可怕的梦】</p>
+    <p class="title">【{{data.dreamTitle}}】</p>
     <div class="content">
-      <span class="name">用户名：</span>
-      又做了这样可怕的梦，就是回家用钥匙打开门以后，转身关门的时候发现有人尾随要进门，又做了这样可怕的梦，就是回家用钥匙打开门以后，转身关门的时候发现有人尾随要进门，那眼神太可怕了太凶恶了，我就往外推，想把插销插上……
+      <span class="name">{{data.username}}：</span>
+      {{data.dreamContent}}
     </div>
-    <div class="content reveal">
+    <div class="content reveal" v-if="data.reply">
       <span class="name">解梦师：</span>
-      又做了这样可怕的梦，就是回家用钥匙打开门以后，转身关门的时候发现有人尾随要进门，又做了这样可怕的梦，就是回家用钥匙打开门以后，转身关门的时候发现有人尾随要进门，那眼神太可怕了太凶恶了，我就往外推，想把插销插上……
+      {{data.reply}}
     </div>
-    <div class="tips" v-show="">请耐心等待解梦师回信……</div>
+    <div class="tips" v-if="!data.reply">请耐心等待解梦师回信……</div>
     <div class="iconfont" @click="openClick"><span>&#xe652;</span></div>
   </div>
 </template>
@@ -22,10 +22,18 @@ export default {
       active:false
     }
   },
+  props:{
+    data:{
+      type:Object
+    }
+  },
   methods: {
     openClick(){
       this.active = !this.active;
     }
+  },
+  mounted(){
+    console.log(this.data)
   }
 }
 </script>

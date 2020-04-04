@@ -145,6 +145,7 @@ export default {
   }
   .send .list>div:nth-child(2)>div{
     font-size: .26rem;
+    line-height: .3rem
   }
   .send .title{
 
@@ -170,6 +171,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
   }
   .send .time{
     font-size: .21rem;

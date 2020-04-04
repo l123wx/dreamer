@@ -4,7 +4,7 @@
       <span class="iconfont">&#xe656;</span>
       点击你想了解的关键词进行解梦
     </p>
-    <div class="title">一个奇妙的梦</div>
+    <div class="title">{{dreamTitle}}</div>
     <div class="content">
       <span v-for="(item,index) in words" 
             :key="item.index" 
@@ -22,13 +22,19 @@
                        position="bottom"
                        round
                        :overlay="false"
-                       class="auto_result_popup">
-      <classify-dropdown-menu />
-      <div style="height:calc(100vh - 6.2rem)">
-        <reveal-lists />
-      </div>
-      <div>
-        
+                       class="auto_result_popup"
+                       style="overflow: hidden">
+      <div style="height:100%;overflow: hidden;position: relative;">
+        <classify-dropdown-menu v-if="popupShow" @firstClassifyClick="firstClassifyClick" @childClassifyClick="childClassifyClick"/>
+        <div style="height:calc(100vh - 6.2rem)">
+          <reveal-lists :lists="revealDreamList" @listClick="listClick"/>
+        </div>
+        <!-- 横向关键词选择处 -->
+        <div class="DreamKeyWordList">
+          <div nowrap>
+            <span v-for="item in 10">关键词</span>
+          </div>
+        </div>
       </div>
     </auto-result-popup>
   </div>
@@ -36,7 +42,7 @@
 
 <script>
 import { Popup } from 'vant'
-import { split_dream } from '@/assets/javaScript/_axios'
+import { split_dream,reveal_dream } from '@/assets/javaScript/_axios'
 import ClassifyDropdownMenu from './ClassifyDropdownMenu'
 import RevealLists from './RevealLists'
 export default {
@@ -45,12 +51,18 @@ export default {
     return {
       content:'',
       words:[],
-      popupShow:false
+      popupShow:false,
+      revealDreamList:[],
+      firstClassifyId: 0,
+      value:''
     }
   },
   props:{
     dreamId:{
       type:Number
+    },
+    dreamTitle: {
+      type: String
     }
   },
   components: {
@@ -62,8 +74,34 @@ export default {
     searchword(e){
       let str = e.replace(/[。|？|！|，|、|；|：|“|”|‘|’|（|）|《|》|〈|〉|【|】|『|』|「|」|﹃|﹄|〔|〕|…|—|～|﹏|￥|－ ＿|-]/g,"");
       str = str.replace(/[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?]/g,"");  
-      console.log(str)
       this.popupShow = true
+      this.value = str
+      this.revealDream(str)
+    },
+    revealDream(val,cid,full){
+      reveal_dream({
+        q:encodeURIComponent(val),
+        cid:cid,
+        full:0
+      }).then(res=>{
+        this.revealDreamList = res.data.result
+        console.log(this.revealDreamList)
+      })
+    },
+    firstClassifyClick(id){
+      this.firstClassifyId = id;
+      this.revealDream(this.value,id)
+    },
+    childClassifyClick(id){
+      if( id == 0 ){
+        revealDream(this.value,this.firstClassifyId);
+        console.log("子类选全部，用父类的去查")
+      }else{
+        this.revealDream(this.value,id)
+      }
+    },
+    listClick(id){
+
     }
   },
   mounted() {
@@ -72,9 +110,9 @@ export default {
         dreamId:this.dreamId
       }).then(res=>{
         // let word = '';
-        console.log(res)
+        // console.log(res)
         this.words = res.data;
-        console.log(this.words)
+        // console.log(this.words)
         // for(var i in res.data){
         //   console.log(i)
         //   if( res.data[i].wordType=="n" || res.data[i].wordType=="ns" || res.data[i].wordType=="LOC"){
@@ -145,5 +183,26 @@ export default {
      height: 8.2rem;
      background-color:#201624;
      padding-top:38px
+  }
+  .DreamKeyWordList{
+    position: absolute;
+    bottom: 0;
+    overflow-x:auto; 
+    width: 100%;
+    background-image: linear-gradient(to bottom ,rgba(32,22,36,0) 0%,rgba(32,22,36,1) 60%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00ffffff, endColorstr=#ffffff, GradientType=0);
+  }
+  .DreamKeyWordList>div{
+    margin:.6rem .2rem .7rem;
+    white-space:nowrap
+  }
+  .DreamKeyWordList>div>span{
+    padding:.12rem .23rem;
+    border-radius: .24rem;
+    background-color: #fce782;
+    margin: 0 .06rem;
+  }
+  .DreamKeyWordList>div>span:last-child{
+    margin-right: .3rem;
   }
 </style>

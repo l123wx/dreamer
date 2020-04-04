@@ -35,11 +35,18 @@ export default {
           pageNum:1,
           pageSize:5,
         }).then(res=>{
+          console.log(res)
           if(res.msg == "星辰数量不足"){
             Dialog({message:'星辰数量不足'})
           }else{
-            this.$router.push("DreamWorld");
-            this.readDream(res.data.list)
+            if( res.data.list.length < 5 ){
+              Dialog.alert({
+                message: '哦豁！已经没有梦啦，下次再来吧'
+              })
+            }else{
+              this.$router.push("DreamWorld");
+              this.readDream(res.data.list)
+            }
           }
         }).catch(err=>{
         })
@@ -53,7 +60,8 @@ export default {
       get_user_info({
         token:this.$globalData.token
       }).then(res=>{
-        localStorage.setItem('userInfo',JSON.stringify(res.data));
+        // localStorage.setItem('userInfo',JSON.stringify(res.data));
+        this.$globalData.userInfo = res.data;
         this.$router.push('/home')
       })
     },

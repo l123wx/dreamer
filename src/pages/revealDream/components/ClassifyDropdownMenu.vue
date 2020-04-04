@@ -44,8 +44,10 @@ export default {
   },
   methods: {
     firstClassifyClick(id,name){
-      this.firstActiveIndex=id;
-      this.firstTitle=name
+      this.firstActiveIndex = id;
+      this.firstTitle = name
+      this.childActiveIndex = 0;
+      this.childTitle = '全部子类'
       this.$emit('firstClassifyClick',id)
     },
     childClassifyClick(id,name){
@@ -57,19 +59,23 @@ export default {
   watch:{
     firstActiveIndex(e){
       if(e != 0){
-        // get_dream_column({
-        //   fid:e
-        // }).then(res=>{
-        //   let arr = res.data.result.reverse();
-        //   arr.push({fid:0,id:0,name:'全部子类'});
-        //   this.childClassify = arr.reverse();
-        //   console.log(this.childClassify)
-        // })
+        get_dream_column({
+          fid:e
+        }).then(res=>{
+          let arr = res.data.reverse();
+          arr.push({fid:0,id:0,name:'全部子类'});
+          this.childClassify = arr.reverse();
+          // console.log(this.childClassify)
+        })
+      }else{
+        this.childClassify = [{fid:0,id:0,name:'全部子类'}];
+        this.childActiveIndex = 0;
+        this.childTitle = '全部子类'
       }
     }
   },
   mounted() {
-    console.log(dreamFirstClassify)
+    // console.log(dreamFirstClassify)
   }
 }
 </script>

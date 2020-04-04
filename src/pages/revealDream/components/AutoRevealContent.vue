@@ -10,7 +10,7 @@
     <ul class="lists">
       <li v-for="item in lists" 
           :class="[listActiveIndex==item.id?'active':'']" 
-          @click="listClick(item.id)"
+          @click="listClick(item.id,item.title)"
           :data-id="item.id">
         <div>
           <span v-show="listActiveIndex==item.id" class="iconfont">&#xe651;</span>
@@ -50,12 +50,12 @@ export default {
       this.sortType = 0;
     },
     startReveal(){
-      this.$emit('startReveal',this.listActiveIndex)
+      this.$emit('startReveal')
     },
     // 当每条栏目背点击时触发
-    listClick(e) {
-      this.listActiveIndex = e;
-      this.$emit('listClick')
+    listClick(id,title) {
+      this.listActiveIndex = id;
+      this.$emit('listClick',id,title)
     }
   },
   mounted() {

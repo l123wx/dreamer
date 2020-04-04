@@ -4,18 +4,18 @@
 <template>
   <div class="create_dream">
     <c-d-header @create_dream="create_dream" :pageType="typePage"/>
-    <c-d-content :pageType="typePage" :dreamId="dreamId"/>
+    <c-d-content :typePage="typePage" :dreamId="dreamId"/>
     <c-d-nav @click_btn3="chooseTimeClick" 
              @revise_dream="revise_dream"
              :typePage="typePage"
              :dreamId="dreamId"
-             @clock_dream="ClockMenuShow=true"/>
+             @clock_dream="ClockMenuShow=true"
+             @move_dream="move_dream"/>
     <!-- 时间选择弹窗 -->
     <popup
       v-model="timePopupShow"
       position="bottom"
-      :style="{ height: '4.6rem' }"
-    >
+      :style="{ height: '4.6rem' }">
       <datetime-picker
         v-model="currentDate"
         type="date"
@@ -44,6 +44,24 @@
                   cancel-text="取消"
                   :round="false"
                   close-on-click-action/>
+
+    <popup
+      v-model="changeColumnIdShow"
+      position="bottom"
+      :style="{ height: '3.6rem' ,'background-color':'#201624'}"
+      round>
+      <div class="changeColumn">
+        <p>
+          移动游记到
+          <span>移动</span>
+        </p>
+        <div>
+          <div>
+            <img src="@/assets/images/createDream/column1.png" />
+          </div>
+        </div>
+      </div>
+    </popup>
   </div>
 </template>
 
@@ -52,7 +70,7 @@ import CDHeader from './components/Header'
 import CDContent from './components/Content'
 import CDNav from './components/Nav'
 import { DatetimePicker,Popup,Picker,Dialog,ActionSheet,Notify  } from 'vant'
-import { add_dream,locked_single_dream } from '@/assets/javaScript/_axios.js'
+import { add_dream,locked_single_dream,get_dream_info } from '@/assets/javaScript/_axios.js'
 export default {
   name: 'CreateDream',
   data () {
@@ -62,6 +80,7 @@ export default {
       maxDate: new Date(2025, 10, 1),
       currentDate: new Date(),
       timePopupShow:false,
+      changeColumnIdShow:false,
       columns: ['早', '中', '晚'],
       timeType: 0, //0:年月日 1:早中晚
       datetimeValue: '',
@@ -114,7 +133,7 @@ export default {
           const time = new Date();
           this.datetimeValue = time.getFullYear()+'-'+(time.getMonth()+1)+'-'+time.getDate()+' '+time.getHours()+':'+time.getMinutes()+':'+time.getSeconds();
         }
-        console.log(message)
+        // console.log(message)
         add_dream({
           title,
           content:message,
@@ -146,25 +165,34 @@ export default {
         type = 1;
       }
       locked_single_dream({
-          dreamId:this.dreamId,
-          type:type
-        }).then(res=>{
-          if(res.data=="操作成功"){
-            Notify({ type: 'success', message: '已'+(type==0?'锁定':'解锁') });
-            
-          }else{
-            Notify({ type: 'danger', message: '操作失败，请重试'});
-          }
-        })
+        dreamId:this.dreamId,
+        type:type
+      }).then(res=>{
+        if(res.data=="操作成功"){
+          Notify({ type: 'success', message: '已'+(type==0?'锁定':'解锁') });
+        }else{
+          Notify({ type: 'danger', message: '操作失败，请重试'});
+        }
+      })
     },
+    move_dream(){
+      
+    }
   },
   created(){
     this.typePage = this.$route.params.type;
     if(this.$route.params.type!="create"){
       this.dreamId = this.$route.params.dreamId
       console.log(this.dreamId)
+      get_dream_info({
+        dreamId: this.dreamId
+      }).then(res=>{
+        console.log(res)
+        this.columnId = res.data.type
+      })
     }
-    // console.log(this.dreamId)
+    console.log(this.$route.params)
+
   }
 }
 </script>
@@ -173,5 +201,18 @@ export default {
   .create_dream{
     background-color: #f2f2f2;
     position: relative;
+  }
+  .changeColumn>p{
+    color:#959595;
+    padding: .3rem .26rem;
+  }
+  .changeColumn>p>span{
+    float:right;
+    color: #b4a8d5;
+  }
+  .changeColumn>div{
+    height: 2.1rem;
+    background-color: #eee;
+    padding: 0 .5rem;
   }
 </style>
