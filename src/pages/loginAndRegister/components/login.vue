@@ -149,7 +149,7 @@ export default {
             Toast.success((this.pageType=='login'?'登陆':'注册')+'成功');
             localStorage.setItem('token',res.data.token);
             // localStorage.setItem('userInfo',JSON.stringify(res.data));
-            this.$globalData.userInfo = JSON.stringify(res.data);
+            this.$globalData.userInfo = res.data;
             // console.log(res.data)
             this.$router.push('/home')
           }else{

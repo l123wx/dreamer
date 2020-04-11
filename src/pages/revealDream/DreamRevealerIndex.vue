@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { Dialog } from 'vant'
 export default {
   name: 'DreamRevealerIndex',
   data () {
@@ -47,7 +48,11 @@ export default {
       this.$router.push('/RevealDreamLetter')
     },
     startReveal(){
-      this.$router.push('/DreamRevealerIng')
+      if(this.$globalData.userInfo.ticketCount <= 0){
+        Dialog({message:'解梦券数量不足'})
+      }else{
+        this.$router.push('/DreamRevealerIng')
+      }
     }
   }
 }

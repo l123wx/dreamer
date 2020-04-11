@@ -1,6 +1,6 @@
 <template>
   <div class="nav">
-    <div v-if="typePage && typePage=='create'">
+    <div v-if="(typePage && typePage =='create') || (typePage && typePage =='revise')">
       <span class="iconfont" @click="click_btn1"></span>
       <span class="iconfont" @click="click_btn2"></span>
       <span class="iconfont" @click="click_btn3">&#xe63b;</span>
@@ -103,7 +103,7 @@ export default {
   .nav>div>span{
     display:inline-block;
     flex:1;
-    font-size: .65rem;
+    font-size: .5rem;
     text-align: center;
     height:1.04rem;
     line-height:1.04rem;

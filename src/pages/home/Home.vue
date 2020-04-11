@@ -35,7 +35,7 @@ import HomeNav from './components/Nav'
 import HomeTitle from './components/Title'
 import HomeOverlay from '@/components/Overlay'
 import HomeMenu from './components/Menu'
-import { get_dream_list } from '@/assets/javaScript/_axios'
+import { get_dream_list,get_user_info } from '@/assets/javaScript/_axios'
 export default {
   name: 'Home',
   components: {
@@ -102,10 +102,10 @@ export default {
       get_dream_list({
         columnId:this.imgIndex+1
       }).then(res=>{
-        // console.log(res)
         if( res.data == '该栏目下还没有发布梦境'){
           res.data = []
         }
+        // console.log(res.data)
         this.$router.push({
           name:'DreamList',
           params:{
@@ -123,9 +123,17 @@ export default {
     }
   },
   mounted(){
-    console.log(this.$globalData.userInfo)
-    if(this.$globalData.userInfo){
+    // console.log(Object.keys(this.$globalData.userInfo))
+    if(this.$globalData.userInfo && Object.keys(this.$globalData.userInfo).length != 0){
       this.starNum = this.$globalData.userInfo.starsCount;
+    }else{
+      get_user_info({
+        token: this.$globalData.token
+      }).then(res=>{
+        // console.log(res.data)
+        this.$globalData.userInfo = res.data;
+        this.starNum = res.data.starsCount;
+      })
     }
     this.list = this.$globalData.homeDreamLists;
     this.title = this.list[0].title;

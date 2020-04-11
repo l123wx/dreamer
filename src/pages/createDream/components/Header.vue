@@ -5,7 +5,7 @@
     {{pageType=='create'?'记录梦境':'梦境游记'}}
     <span class="iconfont send_btn"
           @click="create_dream" 
-          v-if="pageType=='create'">&#xe638;</span>
+          v-if="pageType=='create' || pageType == 'revise'">&#xe638;</span>
   </div>
 </template>
 

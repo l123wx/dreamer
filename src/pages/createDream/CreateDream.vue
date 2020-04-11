@@ -10,7 +10,7 @@
              :typePage="typePage"
              :dreamId="dreamId"
              @clock_dream="ClockMenuShow=true"
-             @move_dream="move_dream"/>
+             @move_dream="changeColumnIdShow=true"/>
     <!-- 时间选择弹窗 -->
     <popup
       v-model="timePopupShow"
@@ -53,13 +53,17 @@
       <div class="changeColumn">
         <p>
           移动游记到
-          <span>移动</span>
+          <span @click="move_dream">移动</span>
         </p>
-        <div>
-          <div>
-            <img src="@/assets/images/createDream/column1.png" />
-          </div>
-        </div>
+        <ul>
+          <li v-for="(item,index) in this.$globalData.homeDreamLists" 
+              v-if="(index*1+1)!=columnId"
+              @click="dreamColumnActiveIndex=(index*1+1)"
+              :class="(index*1+1)==dreamColumnActiveIndex?'active':''">
+            <img :src="item.previewSrc"/>
+            <div >{{item.title}}</div>
+          </li>
+        </ul>
       </div>
     </popup>
   </div>
@@ -70,7 +74,7 @@ import CDHeader from './components/Header'
 import CDContent from './components/Content'
 import CDNav from './components/Nav'
 import { DatetimePicker,Popup,Picker,Dialog,ActionSheet,Notify  } from 'vant'
-import { add_dream,locked_single_dream,get_dream_info } from '@/assets/javaScript/_axios.js'
+import { add_dream,locked_single_dream,get_dream_info,change_single_dream_column,update_dream } from '@/assets/javaScript/_axios.js'
 export default {
   name: 'CreateDream',
   data () {
@@ -80,13 +84,14 @@ export default {
       maxDate: new Date(2025, 10, 1),
       currentDate: new Date(),
       timePopupShow:false,
-      changeColumnIdShow:false,
+
       columns: ['早', '中', '晚'],
       timeType: 0, //0:年月日 1:早中晚
       datetimeValue: '',
       typePage: '',
       dreamId: 0,
-
+      dreamColumnActiveIndex:-1, //改变游记栏目时选中的栏目的index
+      changeColumnIdShow:false,
       ClockMenuShow: false,
       ClockActions: [
         { name: '锁定这个梦' },
@@ -134,19 +139,39 @@ export default {
           this.datetimeValue = time.getFullYear()+'-'+(time.getMonth()+1)+'-'+time.getDate()+' '+time.getHours()+':'+time.getMinutes()+':'+time.getSeconds();
         }
         // console.log(message)
-        add_dream({
-          title,
-          content:message,
-          dreamTime:this.datetimeValue,
-          pictureCount:0,
-          voiceCount:0,
-          type:this.columnId
-        }).then(res=>{
-          console.log(res)
-          if(res.msg == '梦境发布成功'){
-            this.$router.push({name:'RecordFinish',params:{dreamId:res.data.id}})
-          }
-        })
+        if(this.typePage == "create"){
+          add_dream({
+            title,
+            content:message,
+            dreamTime:this.datetimeValue,
+            pictureCount:0,
+            voiceCount:0,
+            type:this.columnId
+          }).then(res=>{
+            console.log(res)
+            if(res.status == 0){
+              this.$router.push({name:'RecordFinish',params:{dreamId:res.data.id}})
+            }
+          })
+        }else{
+          update_dream({
+            title,
+            content:message,
+            dreamTime:this.datetimeValue,
+            pictureCount:0,
+            voiceCount:0,
+            dreamId:this.dreamId
+          }).then(res=>{
+            console.log(res)
+            if(res.status == 0){
+              Notify({ type: 'success', message: '修改成功' });
+              this.typePage = 'read'
+            }else{
+              Notify({ type: 'danger', message: '操作失败，请重试'});
+            }
+          })
+        }
+        
       }else if( title == '为梦境起个名字吧'){
         Dialog({ message: '给梦起个名字吧' });
       }else if( message=='在这里输入输入内容' ){
@@ -154,7 +179,7 @@ export default {
       }
     },
     revise_dream(){
-      this.typePage = 'create'
+      this.typePage = 'revise'
     },
     // 点击锁定一个梦的弹窗
     clockOnSelect(item){
@@ -176,7 +201,20 @@ export default {
       })
     },
     move_dream(){
-      
+      change_single_dream_column({
+        dreamId:this.dreamId,
+        type:this.dreamColumnActiveIndex
+      }).then(res=>{
+        console.log(res)
+        if(res.status==0){
+          this.changeColumnIdShow = false;
+          Notify({ type: 'success', message: '已修改' });
+          this.columnId = this.dreamColumnActiveIndex;
+          this.dreamColumnActiveIndex = -1;
+        }else{
+          Notify({ type: 'danger', message: '操作失败，请重试'});
+        }
+      })
     }
   },
   created(){
@@ -192,7 +230,6 @@ export default {
       })
     }
     console.log(this.$route.params)
-
   }
 }
 </script>
@@ -210,9 +247,38 @@ export default {
     float:right;
     color: #b4a8d5;
   }
-  .changeColumn>div{
+  .changeColumn>ul{
     height: 2.1rem;
-    background-color: #eee;
-    padding: 0 .5rem;
+    background-color: #201624;
+    padding: .1rem  0;
+    margin: 0 .55rem;
+    overflow: auto;
+    display: flex;
+  }
+  .changeColumn>ul::-webkit-scrollbar   
+  {  
+    width:0px;
+    height:0px;    
+  }  
+  .changeColumn>ul>li{
+    height: 100%;
+    display: inline-block;
+    padding: 0 .08rem;
+  }
+  .changeColumn>ul>li>img{
+    height: 1.44rem;
+    width: 1.44rem;
+  }
+  .changeColumn>ul>li>div{
+    height: .66rem;
+    color: #959595;
+    /*background-color: #382a3e;*/
+    line-height: .66rem;
+    text-align: center;
+    font-size: .24rem;
+    transition: all .2s;
+  }
+  .changeColumn>ul>li.active>div{
+    background-color: #382a3e;
   }
 </style>

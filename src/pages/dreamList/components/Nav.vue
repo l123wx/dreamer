@@ -66,7 +66,7 @@ export default {
     display: inline-block;
     height: 1.2rem;
     width: 1.2rem;
-    line-height: 1.14rem;
+    line-height: 1.2rem;
     text-align: center;
     border-radius: 50%;
     border:1px solid #fff;

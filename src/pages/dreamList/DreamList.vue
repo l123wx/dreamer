@@ -190,6 +190,9 @@ export default {
       }).then(res=>{
         // console.log(res)
         if(res.success == true){
+          if( res.data == '该栏目下还没有发布梦境'){
+            res.data = []
+          }
           this.lists = res.data;
           let obj = JSON.parse(localStorage.getItem('dreamListData'));
           obj.lists = res.data;

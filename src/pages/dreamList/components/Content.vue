@@ -44,23 +44,7 @@ export default {
       type: Number
     },
     lists: {
-      type:Array,
-      default() {
-        return [
-          {
-            id: 31,
-            title: "111一个梦的标题5",
-            content: "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容",
-            starsCount: 0,
-            type: 1,
-            userId: 55,
-            isPublic: 0,
-            pictureCount: 2,
-            voiceCount: 1,
-            dreamTime: 1585189056000,
-          }
-        ]
-      }
+      type:Array
     }
   },
   methods: {

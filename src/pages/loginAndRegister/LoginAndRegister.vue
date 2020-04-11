@@ -29,8 +29,8 @@ export default {
         console.log(res)
         if(res.status == 0){
           // localStorage.setItem('userInfo',JSON.stringify(res.data));
-          this.$globalData.userInfo = res.data
-          this.$router.push('home')
+          this.$globalData.userInfo = res.data;
+          this.$router.push('home');
         }
       })
     }

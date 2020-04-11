@@ -17,6 +17,8 @@
       <span class="iconfont">&#xe64e;</span>
       返回解梦所
     </div>
+
+    <!-- 弹窗 -->
     <auto-result-popup v-model="popupShow"
                        closeable
                        position="bottom"
@@ -25,24 +27,37 @@
                        class="auto_result_popup"
                        style="overflow: hidden">
       <div style="height:100%;overflow: hidden;position: relative;">
+        <!-- 分类选择下拉栏 -->
         <classify-dropdown-menu v-if="popupShow" @firstClassifyClick="firstClassifyClick" @childClassifyClick="childClassifyClick"/>
+        <!-- 查询结果 -->
         <div style="height:calc(100vh - 6.2rem)">
           <reveal-lists :lists="revealDreamList" @listClick="listClick"/>
         </div>
         <!-- 横向关键词选择处 -->
         <div class="DreamKeyWordList">
           <div nowrap>
-            <span v-for="item in 10">关键词</span>
+            <span v-for="item in keyWordList"
+                  @click="searchword(item)">{{item}}</span>
           </div>
         </div>
       </div>
     </auto-result-popup>
+    <!-- 具体解析弹窗 -->
+    <dream-dialog style="border:2px solid #434343;width:5.4rem;" v-model="dreamDialogshow" :showConfirmButton="false" :show-cancel-button="false">
+      <div class="reveal_box">
+        <span class="iconfont" @click="closeRevealBox">&#xe622;</span>
+        <p>梦见<span>{{dreamDialogData.title}}</span></p>
+        <div class="content">
+          <div v-for="(item,index) in dreamDialogData.list">{{item}}</div>
+        </div>
+      </div>
+    </dream-dialog>
   </div>
 </template>
 
 <script>
-import { Popup } from 'vant'
-import { split_dream,reveal_dream } from '@/assets/javaScript/_axios'
+import { Popup,Dialog } from 'vant'
+import { split_dream,reveal_dream,reveal_dream_detail } from '@/assets/javaScript/_axios'
 import ClassifyDropdownMenu from './ClassifyDropdownMenu'
 import RevealLists from './RevealLists'
 export default {
@@ -54,7 +69,10 @@ export default {
       popupShow:false,
       revealDreamList:[],
       firstClassifyId: 0,
-      value:''
+      value:'',
+      keyWordList:[],
+      dreamDialogshow:false,
+      dreamDialogData:{}
     }
   },
   props:{
@@ -63,20 +81,36 @@ export default {
     },
     dreamTitle: {
       type: String
-    }
+    },
   },
   components: {
     AutoResultPopup:Popup,
     ClassifyDropdownMenu,
-    RevealLists
+    RevealLists,
+    dreamDialog:Dialog.Component
+  },
+  watch:{
+    words(n){
+      for(var i in this.words){
+        if(n[i].wordType=='n'||n[i].wordType=='ns'||n[i].wordType=='LOC'){
+          this.keyWordList.push(this.keyWordFilter(n[i].word))
+        }
+      }
+      this.keyWordList = Array.from(new Set(this.keyWordList))
+      console.log(this.keyWordList)  
+    }
   },
   methods: {
     searchword(e){
-      let str = e.replace(/[。|？|！|，|、|；|：|“|”|‘|’|（|）|《|》|〈|〉|【|】|『|』|「|」|﹃|﹄|〔|〕|…|—|～|﹏|￥|－ ＿|-]/g,"");
-      str = str.replace(/[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?]/g,"");  
+      const word = this.keyWordFilter(e)
       this.popupShow = true
-      this.value = str
-      this.revealDream(str)
+      this.value = word
+      this.revealDream(word)
+    },
+    keyWordFilter(e){
+      let str = e.replace(/[。|？|！|，|、|；|：|“|”|‘|’|（|）|《|》|〈|〉|【|】|『|』|「|」|﹃|﹄|〔|〕|…|—|～|﹏|￥|－ ＿|-]/g,"");
+      str = str.replace(/[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?]/g,"");
+      return str;
     },
     revealDream(val,cid,full){
       reveal_dream({
@@ -101,7 +135,16 @@ export default {
       }
     },
     listClick(id){
-
+      reveal_dream_detail({
+        id:id
+      }).then(res=>{
+        // console.log(res)
+        this.dreamDialogData = res.data.result;
+        this.dreamDialogshow = true;
+      })
+    },
+    closeRevealBox(){
+      this.dreamDialogshow = false;
     }
   },
   mounted() {
@@ -109,20 +152,7 @@ export default {
       split_dream({
         dreamId:this.dreamId
       }).then(res=>{
-        // let word = '';
-        // console.log(res)
         this.words = res.data;
-        // console.log(this.words)
-        // for(var i in res.data){
-        //   console.log(i)
-        //   if( res.data[i].wordType=="n" || res.data[i].wordType=="ns" || res.data[i].wordType=="LOC"){
-        //     word = '<span style="color:#fce782;margin:0 2px" @click="searchWorld"'>+ res.data[i].word +'</span>';
-        //   }else{
-        //     word = res.data[i].word;
-        //   }
-        //   this.content +=  word;
-        //   console.log(word)
-        // }
       })
     }
   }
@@ -190,10 +220,9 @@ export default {
     overflow-x:auto; 
     width: 100%;
     background-image: linear-gradient(to bottom ,rgba(32,22,36,0) 0%,rgba(32,22,36,1) 60%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00ffffff, endColorstr=#ffffff, GradientType=0);
   }
   .DreamKeyWordList>div{
-    margin:.6rem .2rem .7rem;
+    margin:1.6rem .2rem .7rem;
     white-space:nowrap
   }
   .DreamKeyWordList>div>span{
@@ -204,5 +233,32 @@ export default {
   }
   .DreamKeyWordList>div>span:last-child{
     margin-right: .3rem;
+  }
+  /*详情信息弹窗*/
+  .reveal_box{
+    padding: .58rem .46rem;
+    background-color: #201624;
+    position: relative;
+  }
+  .reveal_box .iconfont{
+    position: absolute;
+    right: .36rem;
+    top: .36rem;
+    color: #959595;
+  }
+  .reveal_box>p{
+    font-size: .3rem;
+    color: #b4a8d5;
+    padding-bottom: .3rem;
+  }
+  .reveal_box>p>span{
+    color: #fff;
+  }
+  .reveal_box .content{
+    color: #959595;
+    line-height: .44rem;
+    overflow-y:auto;
+    max-height: 7.2rem;
+    font-size: .26rem;
   }
 </style>
