@@ -109,7 +109,7 @@ export default {
             Toast.clear();
             Toast.success('更换成功');
             this.$globalData.userInfo.phone = this.phone;
-            console.log(res.data)
+            // console.log(res.data)
           }else{
             Dialog({message:res.data})
           }

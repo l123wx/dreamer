@@ -2,7 +2,7 @@
   <div class="item_number">
     <div class="star">
       <div>
-        <img src="@/assets/images/star.png" />
+        <img :src="photoSrc+'star.png'" />
         <span class="number">{{starNbm>999999?'999999+':starNbm}}</span>
       </div>
       <div>
@@ -12,7 +12,7 @@
     </div>
     <div class="tickets">
       <div>
-        <img src="@/assets/images/tickets.png" />
+        <img :src="photoSrc+'tickets.png'" />
         <span class="number">{{ticketsNbm>999999?'999999+':ticketsNbm}}</span>
       </div>
       <div>
@@ -28,7 +28,7 @@ export default {
   name: 'ItemNumber',
   data () {
     return {
-
+      photoSrc:this.$globalData.photoSrc,
     }
   },
   props: {

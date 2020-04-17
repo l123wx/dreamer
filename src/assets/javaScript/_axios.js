@@ -4,7 +4,7 @@ import { Toast } from 'vant';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.common['token'] = globalData.token;
-axios.defaults.baseURL ='http://mjlr.smtboy.com'
+axios.defaults.baseURL ='https://abc.llwxi.cn'
 axios.defaults.transformRequest = [function (data) {
   let ret = ''
   for (let it in data) {
@@ -239,6 +239,7 @@ export function enter_dream_world(options){
     })
   })
 }
+//已读一个梦
 export function read_dream(options){
   return new Promise((resolve,reject) => {
     axios({
@@ -273,6 +274,21 @@ export function get_dream_info(options){
   return new Promise((resolve,reject) => {
     axios({
         url: '/dream/get_dream_info.do',
+        method: 'post',
+        data: options
+    }).then(res=>{
+        resolve(res)
+    }).catch(err=>{
+        reject(err)
+    })
+  })
+}
+
+//查询梦的语音
+export function select_dream_voice(options){
+  return new Promise((resolve,reject) => {
+    axios({
+        url: '/dream/select_dream_voice.do',
         method: 'post',
         data: options
     }).then(res=>{
@@ -358,6 +374,21 @@ export function reveal_dream_detail(options){
   })
 }
 
+//查询一个精确结果
+export function search_one_answer(options){
+  return new Promise((resolve,reject) => {
+    axios({
+        url: '/dream/search_one_answer.do',
+        method: 'post',
+        data: options
+    }).then(res=>{
+        resolve(res)
+    }).catch(err=>{
+        reject(err)
+    })
+  })
+}
+
 // 解梦列表查询梦的信息
 export function select_reveal_dream(options){
   return new Promise((resolve,reject) => {
@@ -403,11 +434,86 @@ export function upload_voice_or_picture(options){
   })
 }
 
+//上传语音base64
+export function upload_voice_by_base64(options){
+  return new Promise((resolve,reject) => {
+    axios({
+        url: '/dream/upload_voice_by_base64.do',
+        method: 'post',
+        data: options
+    }).then(res=>{
+        resolve(res)
+    }).catch(err=>{
+        reject(err)
+    })
+  })
+}
+
+//给梦插入语音
+export function add_voice_for_dream(options){
+  return new Promise((resolve,reject) => {
+    axios({
+        url: '/dream/add_voice_for_dream.do',
+        method: 'post',
+        data: options
+    }).then(res=>{
+        resolve(res)
+    }).catch(err=>{
+        reject(err)
+    })
+  })
+}
+
+//删除梦中的语音
+export function del_dream_voice(options){
+  return new Promise((resolve,reject) => {
+    axios({
+        url: '/dream/del_dream_voice.do',
+        method: 'post',
+        data: options
+    }).then(res=>{
+        resolve(res)
+    }).catch(err=>{
+        reject(err)
+    })
+  })
+}
+
 // 梦境分词
 export function split_dream(options){
   return new Promise((resolve,reject) => {
     axios({
         url: '/dream/split_dream.do',
+        method: 'post',
+        data: options
+    }).then(res=>{
+        resolve(res)
+    }).catch(err=>{
+        reject(err)
+    })
+  })
+}
+
+//语音转文字
+export function voice_to_text_by_base64(options){
+  return new Promise((resolve,reject) => {
+    axios({
+        url: '/dream/voice_to_text_by_base64.do',
+        method: 'post',
+        data: options
+    }).then(res=>{
+        resolve(res)
+    }).catch(err=>{
+        reject(err)
+    })
+  })
+}
+
+//获取热词
+export function hot_search_keys(options){
+  return new Promise((resolve,reject) => {
+    axios({
+        url: '/dream/hot_search_keys.do',
         method: 'post',
         data: options
     }).then(res=>{

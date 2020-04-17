@@ -5,7 +5,7 @@
     <!-- 获取星辰提示 -->
     <div class="getStar">
       获得星辰
-      <img src="@/assets/images/star.png" />
+      <img :src="photoSrc+'star.png'" />
       x2
     </div>
     <!-- 分享开关 -->
@@ -43,7 +43,8 @@ export default {
     return {
       checked: false,
       loading: false,
-      dreamId: this.$route.params.dreamId
+      dreamId: this.$route.params.dreamId,
+      photoSrc: this.$globalData.photoSrc,
     }
   },
   methods: {

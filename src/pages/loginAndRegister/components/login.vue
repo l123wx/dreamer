@@ -164,7 +164,7 @@ export default {
 
 <style lang="css" scoped>
   .login{
-
+    background-color: #201624;
   }
   .login>div:nth-child(2){
     margin-top: .32rem;

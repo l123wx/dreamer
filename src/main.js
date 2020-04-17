@@ -39,7 +39,11 @@ Vue.filter('timeWord', function (value) {
   else
     return '夜'
 })
-
+//转换空格和回车
+Vue.filter('spaceAndEnter', function (value) {
+  return value = value.replace(/\<br\/\>/g,"\n");
+  // return value;
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

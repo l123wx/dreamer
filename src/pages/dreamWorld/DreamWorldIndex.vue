@@ -1,14 +1,14 @@
 <template>
   <div>
     <!-- 背景图 -->
-    <img class="bg" src="@/assets/images/dreamWorld/photo.jpg" />
+    <img class="bg" :src="photoSrc+'dreamWorld/photo.jpg'" />
     <div class="header">
       <span class="iconfont" @click="backClick">&#xe650;</span>
       梦世界
     </div>
     <div class="center">
       <div>
-        消耗两颗星辰<img src="@/assets/images/star.png" />进行一次探索
+        消耗两颗星辰<img :src="photoSrc+'star.png'" />进行一次探索
       </div>
       <div class="button" @click="toDreamWorld">进入梦世界</div>
       <div>一次探索可以找到5页游记</div>
@@ -23,7 +23,7 @@ export default {
   name: 'DreamWorldIndex',
   data () {
     return {
-
+      photoSrc:this.$globalData.photoSrc,
     }
   },
   methods: {
@@ -35,7 +35,7 @@ export default {
           pageNum:1,
           pageSize:5,
         }).then(res=>{
-          console.log(res)
+          // console.log(res)
           if(res.msg == "星辰数量不足"){
             Dialog({message:'星辰数量不足'})
           }else{
@@ -73,7 +73,7 @@ export default {
       read_dream({
         'dreamIds[]':dreamIds
       }).then(res=>{
-        console.log(res)
+        // console.log(res)
       })
     }
   }

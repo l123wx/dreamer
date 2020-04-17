@@ -29,8 +29,6 @@ import DreamRevealerIng from '@/pages/revealDream/DreamRevealerIng'
 //系统公告
 import Notice from '@/pages/notice/Notice'
 import NoticeDetails from '@/pages/notice/NoticeDetails'
-
-
 Vue.use(Router)
 
 export default new Router({

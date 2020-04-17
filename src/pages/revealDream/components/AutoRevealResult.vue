@@ -4,19 +4,34 @@
       <span class="iconfont">&#xe656;</span>
       点击你想了解的关键词进行解梦
     </p>
-    <div class="title">{{dreamTitle}}</div>
+    <div class="title">{{dreamTitle}}
+      <span class="iconfont" @click="preciseResultDialogshow=true">&#xe662;</span>
+    </div>
     <div class="content">
       <span v-for="(item,index) in words" 
             :key="item.index" 
             :class="[item.wordType=='n'||item.wordType=='ns'||item.wordType=='LOC'?'active':'']"
-            @click="item.wordType=='n'||item.wordType=='ns'||item.wordType=='LOC'?searchword(item.word):''">
-        {{item.word}}
+            @click="item.wordType=='n'||item.wordType=='ns'||item.wordType=='LOC'?searchword(item.word):''"
+            v-html="item.word">
+        <!-- {{item.word | spaceAndEnter}} -->
       </span>
     </div>
-    <div class="button">
+    <div class="button" @click="backTolists">
       <span class="iconfont">&#xe64e;</span>
-      返回解梦所
+      返回梦境列表
     </div>
+    
+    <!-- 精确结果弹窗 -->
+    <dream-dialog style="border:2px solid #434343;width:5.4rem;" v-model="preciseResultDialogshow" :showConfirmButton="false" :show-cancel-button="false">
+      <div class="reveal_box">
+        <span class="iconfont" @click="preciseResultDialogshow=false">&#xe622;</span>
+        <p>解梦结果</p>
+        <div class="content">
+          <div v-for="(item,index) in revealPreciseResult" :key="index">{{item}}</div>
+          <div style="text-align: center" v-if="!revealPreciseResult.length">未查询到相关信息</div>
+        </div>
+      </div>
+    </dream-dialog>
 
     <!-- 弹窗 -->
     <auto-result-popup v-model="popupShow"
@@ -31,7 +46,7 @@
         <classify-dropdown-menu v-if="popupShow" @firstClassifyClick="firstClassifyClick" @childClassifyClick="childClassifyClick"/>
         <!-- 查询结果 -->
         <div style="height:calc(100vh - 6.2rem)">
-          <reveal-lists :lists="revealDreamList" @listClick="listClick"/>
+          <reveal-lists :lists="revealDreamList" @listClick="listClick" @hotKeywordClick="hotKeywordClick"/>
         </div>
         <!-- 横向关键词选择处 -->
         <div class="DreamKeyWordList">
@@ -42,13 +57,14 @@
         </div>
       </div>
     </auto-result-popup>
+
     <!-- 具体解析弹窗 -->
     <dream-dialog style="border:2px solid #434343;width:5.4rem;" v-model="dreamDialogshow" :showConfirmButton="false" :show-cancel-button="false">
       <div class="reveal_box">
         <span class="iconfont" @click="closeRevealBox">&#xe622;</span>
         <p>梦见<span>{{dreamDialogData.title}}</span></p>
         <div class="content">
-          <div v-for="(item,index) in dreamDialogData.list">{{item}}</div>
+          <div v-for="(item,index) in dreamDialogData.list" :key="index">{{item}}</div>
         </div>
       </div>
     </dream-dialog>
@@ -57,7 +73,7 @@
 
 <script>
 import { Popup,Dialog } from 'vant'
-import { split_dream,reveal_dream,reveal_dream_detail } from '@/assets/javaScript/_axios'
+import { split_dream,reveal_dream,reveal_dream_detail,search_one_answer } from '@/assets/javaScript/_axios'
 import ClassifyDropdownMenu from './ClassifyDropdownMenu'
 import RevealLists from './RevealLists'
 export default {
@@ -68,11 +84,13 @@ export default {
       words:[],
       popupShow:false,
       revealDreamList:[],
-      firstClassifyId: 0,
-      value:'',
-      keyWordList:[],
+      firstClassifyId: 0,//一级分类的id
+      value:'',//记录要搜索的词
+      keyWordList:[],//搜索结果下面显示的关键词
       dreamDialogshow:false,
-      dreamDialogData:{}
+      dreamDialogData:{},
+      revealPreciseResult:[],//自动解梦的精确解释合集
+      preciseResultDialogshow:true,//精确结果弹窗
     }
   },
   props:{
@@ -90,15 +108,7 @@ export default {
     dreamDialog:Dialog.Component
   },
   watch:{
-    words(n){
-      for(var i in this.words){
-        if(n[i].wordType=='n'||n[i].wordType=='ns'||n[i].wordType=='LOC'){
-          this.keyWordList.push(this.keyWordFilter(n[i].word))
-        }
-      }
-      this.keyWordList = Array.from(new Set(this.keyWordList))
-      console.log(this.keyWordList)  
-    }
+    
   },
   methods: {
     searchword(e){
@@ -119,7 +129,7 @@ export default {
         full:0
       }).then(res=>{
         this.revealDreamList = res.data.result
-        console.log(this.revealDreamList)
+        // console.log(this.revealDreamList)
       })
     },
     firstClassifyClick(id){
@@ -129,7 +139,7 @@ export default {
     childClassifyClick(id){
       if( id == 0 ){
         revealDream(this.value,this.firstClassifyId);
-        console.log("子类选全部，用父类的去查")
+        // console.log("子类选全部，用父类的去查")
       }else{
         this.revealDream(this.value,id)
       }
@@ -145,6 +155,13 @@ export default {
     },
     closeRevealBox(){
       this.dreamDialogshow = false;
+    },
+    // 回到梦境列表
+    backTolists(){
+      this.$emit("backTolists");
+    },
+    hotKeywordClick(word){
+      this.revealDream(word)
     }
   },
   mounted() {
@@ -152,7 +169,43 @@ export default {
       split_dream({
         dreamId:this.dreamId
       }).then(res=>{
-        this.words = res.data;
+        // this.words = res.data;
+        let string = '';
+        let state = 0 ;//保证在没有可选词的时候也会把字符串输出
+        for(var item in res.data){
+          // console.log()
+          if( res.data[item].wordType=='n'||res.data[item].wordType=='ns'||res.data[item].wordType=='LOC'  ){
+            this.words.push({'word':string,'wordType':''});
+            string = '';
+            this.words.push(res.data[item])
+            if(item == (Object.keys(res.data).length - 1)){
+              state = 1;
+            }
+          }else{
+            string += res.data[item].word;
+          }
+          if(item == (Object.keys(res.data).length - 1) && state == 0){
+            this.words.push({'word':string,'wordType':''});
+          }
+        }
+        //收集可以搜索的词，以便放在搜索结果下面的列表里
+        for(var i in this.words){
+          if(this.words[i].wordType=='n'||this.words[i].wordType=='ns'||this.words[i].wordType=='LOC'){
+            this.keyWordList.push(this.keyWordFilter(this.words[i].word))
+          }
+        }
+        this.keyWordList = Array.from(new Set(this.keyWordList));
+        // console.log(this.keyWordList) 
+        for(var i = 0; i<this.keyWordList.length-1; i++){
+          search_one_answer({
+            q:this.keyWordList[i]
+          }).then(res=>{
+            if( res.data != "无查询结果" && res.data.content != "" ){
+              this.revealPreciseResult.push(res.data.content)
+            }
+          })
+        }
+        // console.log(this.revealPreciseResult)
       })
     }
   }
@@ -180,6 +233,11 @@ export default {
     padding: .4rem .3rem;
     color: #fff;
     font-size: .36rem;
+  }
+  .title>span{
+    font-size: .56rem;
+    float:right;
+    line-height: .3rem;
   }
   .content{
     padding: 0 .3rem;

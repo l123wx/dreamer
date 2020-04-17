@@ -3,8 +3,8 @@
     梦世界
     <span class="iconfont" @click="backClick">&#xe650;</span>
     <div>
-      <img v-show="stared!=-1&&stared" src="@/assets/images/star.png" />
-      <img v-show="!stared"  @click="admire" src="@/assets/images/star-bf.png" />
+      <img v-show="stared!=-1&&stared" :src="photoSrc+'star.png'" />
+      <img v-show="!stared"  @click="admire" :src="photoSrc+'star-bf.png'" />
     </div>
   </div>
 </template>
@@ -14,7 +14,7 @@ export default {
   name: 'Header',
   data () {
     return {
-
+      photoSrc: this.$globalData.photoSrc,
     }
   },
   props:{

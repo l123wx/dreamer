@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <img src="@/assets/images/revealDream/dreamRevealerIndex.jpg" />
+    <img :src="photoSrc+'revealDream/dreamRevealerIndex.jpg'" />
     
     <div class="header">
       <span class="iconfont" @click="backClick">&#xe650;</span>
@@ -8,11 +8,11 @@
     </div>
     <div class="numbers">
       <div>
-        <img src="@/assets/images/star.png" />
+        <img :src="photoSrc+'star.png'" />
         {{this.$globalData.userInfo.starsCount}}
       </div>
       <div>
-        <img src="@/assets/images/tickets.png" />
+        <img :src="photoSrc+'tickets.png'" />
         {{this.$globalData.userInfo.ticketCount}}
       </div>
     </div>
@@ -23,7 +23,7 @@
     </div>
 
     <div class="buttons">
-      <p>解梦需要花费解梦券<img src="@/assets/images/tickets.png" />x1</p>
+      <p>解梦需要花费解梦券<img :src="photoSrc+'tickets.png'" />x1</p>
       <div @click="startReveal"><span class="iconfont">&#xe62d;</span>开始解梦</div>
       <div @click="toLetter"><span class="iconfont">&#xe624;</span>查看解梦回信</div>
       <!-- <div @click=""><span class="iconfont">&#xe64e;</span>返回解梦所</div> -->
@@ -37,7 +37,7 @@ export default {
   name: 'DreamRevealerIndex',
   data () {
     return {
-
+      photoSrc:this.$globalData.photoSrc,
     }
   },
   methods: {

@@ -70,7 +70,7 @@ export default {
         this.$router.go(-1);
         localStorage.removeItem('dreamWorldData');
       }).catch((err) => {
-        console.log(err)
+        // console.log(err)
       });
     },
     //点击未留言的星星，弹出留言窗口
@@ -101,7 +101,7 @@ export default {
             Toast.success('留言成功');
           })
         }).catch((err) => {
-            console.log(err)
+            // console.log(err)
         });
       }
     },
@@ -125,21 +125,21 @@ export default {
     },
     // 点击下面感想中的选项 index从0开始
     evaluate(index){
-      console.log(index)
+      // console.log(index)
       // 发送评论请求
       send_comment({
         dreamId:this.lists[this.dreamIndex].id,
         type:index*1+1
       }).then(res=>{
-        console.log(res.data)
-        console.log(this.lists)
+        // console.log(res.data)
+        // console.log(this.lists)
         //评论成功，更新数据
         if(res.status == 0)
         res.data.isSendComment = 1;
-        console.log(res.data)
+        // console.log(res.data)
         Object.assign(this.lists[this.dreamIndex],res.data);
         this.lists[this.dreamIndex].chooseComment = index*1+1;
-        console.log(this.lists)
+        // console.log(this.lists)
       })
     },
     //检查星星的状态 index是当前梦的index
@@ -159,7 +159,7 @@ export default {
         if(res.msg == "星辰数量不足"){
           Dialog({message:'星辰数量不足'})
         }else{
-          console.log(res)
+          // console.log(res)
           if( this.lists.length ){
             const newArr = [ ...this.lists, ...res.data.list] //合并两个数组
             this.lists = newArr;
@@ -175,7 +175,7 @@ export default {
           localStorage.setItem('dreamWorldData',JSON.stringify(res.data));
         }
       }).catch(err=>{
-        console.log(err)
+        // console.log(err)
       })
     },
     readDream(lists){
@@ -186,7 +186,7 @@ export default {
       read_dream({
         'dreamIds[]':dreamIds
       }).then(res=>{
-        console.log(res)
+        // console.log(res)
       })
     }
   },

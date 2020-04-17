@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :class="imgType" src="@/assets/images/revealDream/indexBg.png" />
+    <img :class="imgType" :src="photoSrc+'revealDream/indexBg.png'" />
     <div class="header">
       <span class="iconfont" @click="backClick">&#xe650;</span>
       <div class="title">
@@ -29,6 +29,7 @@ export default {
     return {
       swidth:window.innerWidth,
       sheight:window.innerHeight,
+      photoSrc:this.$globalData.photoSrc,
     }
   },
   computed:{

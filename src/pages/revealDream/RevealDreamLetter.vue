@@ -1,6 +1,6 @@
 <template>
   <div class="letter">
-    <img src="@/assets/images/revealDream/dreamRevealerIndex.jpg" />
+    <img :src="photoSrc+'revealDream/dreamRevealerIndex.jpg'" />
 
     <div class="header">
       <span class="iconfont" @click="backClick">&#xe650;</span>
@@ -22,7 +22,8 @@ export default {
   name: 'RevealDreamLetter',
   data () {
     return {
-      letterList:[]
+      letterList:[],
+      photoSrc:this.$globalData.photoSrc,
     }
   },
   components: {

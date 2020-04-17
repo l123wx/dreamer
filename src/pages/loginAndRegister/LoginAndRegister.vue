@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <img src="@/assets/images/login/logo.png" />
+    <img :src="photoSrc+'login/logo.png'" />
     <login />
   </div>
 </template>
@@ -12,7 +12,7 @@ export default {
   name: 'LoginAndRegister',
   data () {
     return {
-
+      photoSrc:this.$globalData.photoSrc,
     }
   },
   components: {
@@ -26,7 +26,7 @@ export default {
       alert(this.$globalData.token)
       auto_login({
       }).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.status == 0){
           // localStorage.setItem('userInfo',JSON.stringify(res.data));
           this.$globalData.userInfo = res.data;

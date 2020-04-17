@@ -9,7 +9,7 @@
         <div class="time">2020.03.03</div>
         <div class="content" @click='listClick'>
           <div class="photo">
-            <img src="@/assets/images/notice/photo1.jpg" />
+            <img :src="photoSrc+'notice/photo1.jpg'" />
           </div>
           <div class="word">
             <div>2020.03.03更新日志</div>
@@ -26,7 +26,7 @@ export default {
   name: 'Notice',
   data () {
     return {
-
+      photoSrc:this.$globalData.photoSrc,
     }
   },
   methods:{

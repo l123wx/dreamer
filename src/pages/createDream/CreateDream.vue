@@ -4,13 +4,19 @@
 <template>
   <div class="create_dream">
     <c-d-header @create_dream="create_dream" :pageType="typePage"/>
-    <c-d-content :typePage="typePage" :dreamId="dreamId"/>
+    <c-d-content :typePage="typePage" 
+                 :dreamId="dreamId" 
+                 ref="content" 
+                 :vedioSrcLists="vedioSrcLists"
+                 @deleteVedio="deleteVedio"/>
     <c-d-nav @click_btn3="chooseTimeClick" 
              @revise_dream="revise_dream"
              :typePage="typePage"
              :dreamId="dreamId"
              @clock_dream="ClockMenuShow=true"
-             @move_dream="changeColumnIdShow=true"/>
+             @move_dream="changeColumnIdShow=true"
+             @recorderTransform="recorderTransform"
+             @saveRecord="saveRecord"/>
     <!-- 时间选择弹窗 -->
     <popup
       v-model="timePopupShow"
@@ -74,7 +80,16 @@ import CDHeader from './components/Header'
 import CDContent from './components/Content'
 import CDNav from './components/Nav'
 import { DatetimePicker,Popup,Picker,Dialog,ActionSheet,Notify  } from 'vant'
-import { add_dream,locked_single_dream,get_dream_info,change_single_dream_column,update_dream } from '@/assets/javaScript/_axios.js'
+import { add_dream,
+         locked_single_dream,
+         get_dream_info,
+         change_single_dream_column,
+         update_dream,
+         upload_voice_by_base64,
+         add_voice_for_dream,
+         select_dream_voice,
+         del_dream_voice,
+       } from '@/assets/javaScript/_axios.js'
 export default {
   name: 'CreateDream',
   data () {
@@ -94,9 +109,10 @@ export default {
       changeColumnIdShow:false,
       ClockMenuShow: false,
       ClockActions: [
-        { name: '锁定这个梦' },
-        { name: '解锁这个梦' },
+        { name: '隐藏这个梦' },
+        { name: '公开这个梦' },
       ],
+      vedioSrcLists:[],//语音文件/src {src,type:0 新语音 ：1旧语音}
     }
   },
   components: {
@@ -115,7 +131,7 @@ export default {
     },
     // 处理时间
     chooseTimeFinish(e){
-      console.log(e)
+      // console.log(e)
       let timeValue;
       if(e == '早'){
         timeValue = '10:00:00'
@@ -126,12 +142,12 @@ export default {
       }
       this.datetimeValue = this.datetimeValue+ ' ' + timeValue;
       this.timePopupShow = false
-      console.log(this.datetimeValue)
+      // console.log(this.datetimeValue)
     },
     // 创建梦
     create_dream(){
       const title = this.$children[1].$data.title;
-      const message = this.$children[1].$data.message
+      const message = this.$children[1].$data.message;
       if( title!='为梦境起个名字吧' && message!='在这里输入输入内容'){
         // 如果用户没有选择时间,以当前发布的时间为准
         if(!this.datetimeValue){
@@ -142,28 +158,61 @@ export default {
         if(this.typePage == "create"){
           add_dream({
             title,
-            content:message,
+            content:message.replace(/(\r)*\n/g,"<br/>").replace(/\s/g," "),
             dreamTime:this.datetimeValue,
             pictureCount:0,
-            voiceCount:0,
+            voiceCount:this.vedioSrcLists.length,
             type:this.columnId
           }).then(res=>{
-            console.log(res)
+            // console.log(res)
             if(res.status == 0){
+              this.dreamId = res.data.id;
               this.$router.push({name:'RecordFinish',params:{dreamId:res.data.id}})
+            }
+            // 将语音上传
+            for(var item in this.vedioSrcLists){
+              upload_voice_by_base64({
+                base64Data:this.vedioSrcLists[item].src
+              }).then(res=>{
+                // console.log(res)
+                this.vedioSrcLists[item].src = res.data;
+                add_voice_for_dream({
+                  'voiceUrls[]':res.data,
+                  dreamId:this.dreamId
+                }).then(res=>{
+                  // console.log(res)
+                })
+              })
             }
           })
         }else{
           update_dream({
             title,
-            content:message,
+            content:message.replace(/(\r)*\n/g,"<br/>").replace(/\s/g," "),
             dreamTime:this.datetimeValue,
             pictureCount:0,
-            voiceCount:0,
+            voiceCount:this.vedioSrcLists.length,
             dreamId:this.dreamId
           }).then(res=>{
-            console.log(res)
+            // console.log(res)
             if(res.status == 0){
+              // 将语音上传
+              for(var item in this.vedioSrcLists){
+                if( this.vedioSrcLists[item].type == 0 ){
+                  upload_voice_by_base64({
+                    base64Data:this.vedioSrcLists[item].src
+                  }).then(res=>{
+                    // console.log(res)
+                    this.vedioSrcLists[item].src = res.data;
+                    add_voice_for_dream({
+                      'voiceUrls[]':res.data,
+                      dreamId:this.dreamId
+                    }).then(res=>{
+                      // console.log(res)
+                    })
+                  })
+                }
+              }
               Notify({ type: 'success', message: '修改成功' });
               this.typePage = 'read'
             }else{
@@ -171,7 +220,6 @@ export default {
             }
           })
         }
-        
       }else if( title == '为梦境起个名字吧'){
         Dialog({ message: '给梦起个名字吧' });
       }else if( message=='在这里输入输入内容' ){
@@ -184,7 +232,7 @@ export default {
     // 点击锁定一个梦的弹窗
     clockOnSelect(item){
       let type
-      if(item.name=='锁定这个梦'){
+      if(item.name=='隐藏这个梦'){
         type = 0;
       }else{
         type = 1;
@@ -194,7 +242,7 @@ export default {
         type:type
       }).then(res=>{
         if(res.data=="操作成功"){
-          Notify({ type: 'success', message: '已'+(type==0?'锁定':'解锁') });
+          Notify({ type: 'success', message: '已'+(type==0?'隐藏':'公开') });
         }else{
           Notify({ type: 'danger', message: '操作失败，请重试'});
         }
@@ -205,7 +253,7 @@ export default {
         dreamId:this.dreamId,
         type:this.dreamColumnActiveIndex
       }).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.status==0){
           this.changeColumnIdShow = false;
           Notify({ type: 'success', message: '已修改' });
@@ -215,21 +263,59 @@ export default {
           Notify({ type: 'danger', message: '操作失败，请重试'});
         }
       })
+    },
+    // 语音转文字
+    recorderTransform(e) {
+      // console.log(this.$refs.content.$refs.textarea)
+      this.$refs.content.$refs.textarea.focus();
+      this.$refs.content.message += e;
+    },
+    // 新建一条语音
+    saveRecord(src){
+      this.vedioSrcLists.push({type:0,src})
+      // console.log(this.vedioSrcLists)
+    },
+    // 删除一条语音
+    deleteVedio(index){
+      if(this.typePage == 'create'){
+        Dialog.confirm({
+          message: '确定要删除这条语音吗'
+        }).then(() => {
+          if(this.vedioSrcLists[index].type == 1){//如果是之前创建过的语音
+            del_dream_voice({
+              voiceUrl:this.vedioSrcLists[index].src
+            }).then(res=>{
+              // console.log(res)
+            })
+          }
+          this.vedioSrcLists.splice(index,1);
+        }).catch(() => {
+          // on cancel
+        });
+      }// console.log(this.vedioSrcLists[index])
     }
   },
   created(){
     this.typePage = this.$route.params.type;
     if(this.$route.params.type!="create"){
       this.dreamId = this.$route.params.dreamId
-      console.log(this.dreamId)
+      // console.log(this.dreamId)
       get_dream_info({
         dreamId: this.dreamId
       }).then(res=>{
-        console.log(res)
+        // console.log(res)
         this.columnId = res.data.type
       })
+      select_dream_voice({
+        dreamId: this.dreamId
+      }).then(res=>{
+        // console.log(res)
+        for(let item in res.data){
+          this.vedioSrcLists.push({type:1,src:res.data[item].voiceUrl})
+        }
+      })
     }
-    console.log(this.$route.params)
+    // console.log(this.$route.params)
   }
 }
 </script>

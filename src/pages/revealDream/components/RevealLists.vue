@@ -4,17 +4,31 @@
       <div><span>梦见</span>{{item.title}}</div>
       <p>{{item.des}}</p>
     </div>
-    <div v-show="!lists" class="list notFound">未查询到相关信息</div>
+    <div v-show="lists == null" class="list notFound">未查询到相关信息
+    </div>
+    <div>
+      <div>热门搜索</div>
+      <span  v-for="(item,index) in searchWords" :key="index" @click="hotKeywordClick(item)">{{item}}</span>
+    </div>
     <div class="list" style="background-color:transparent;"></div>
   </div>
 </template>
 
 <script>
+import { hot_search_keys,reveal_dream } from '@/assets/javaScript/_axios'
 export default {
   name: 'RevealLists',
   data () {
     return {
-
+      searchWords:[
+        '被狗咬',
+        '棺材',
+        '发大水',
+        '蛇',
+        '怀孕',
+        '生孩子',
+        '鱼'
+      ]
     }
   },
   props:{
@@ -25,7 +39,26 @@ export default {
   methods: {
     listClick(id){
       this.$emit('listClick',id);
-    }
+    },
+    hotKeywordClick(word){
+      this.$emit("hotKeywordClick",word);
+    },
+    revealDream(val,cid,full){
+      reveal_dream({
+        q:encodeURIComponent(val),
+        cid:cid,
+        full:0
+      }).then(res=>{
+        this.$emit('searchWordClick',res.data.result)
+      })
+    },
+  },
+  mounted(){
+    // hot_search_keys({
+
+    // }).then(res=>{
+    //   console.log(res)
+    // })
   }
 }
 </script>
@@ -69,5 +102,27 @@ export default {
   .notFound{
     text-align: center;
     color: #909090;
+    background-color: transparent;
+  }
+  .notFound+div{
+    padding: .2rem .5rem .6rem;
+    text-align: left;
+    color: #909090;
+  }
+  .notFound+div>div{
+    margin-bottom: .4rem;
+  }
+  .notFound+div>span{
+    padding: .08rem .25rem;
+    margin-right: .1rem;
+    margin-bottom: .2rem;
+    width: auto;
+    background-color: #b4a8d5;
+    height: .3rem;
+    text-align: center;
+    line-height: .3rem;
+    display: inline-block;
+    border-radius: 100px;
+    color: #fff;
   }
 </style>

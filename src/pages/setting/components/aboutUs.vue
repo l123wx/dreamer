@@ -1,7 +1,7 @@
 <template>
   <div class="about_us">
     <div class="logo">
-      <img src="@/assets/images/login/logo.png" />
+      <img :src="photoSrc+'login/logo.png'" />
     </div>
     <div>@梦境旅人<br/>
       电子邮箱：xxx@163.com<br/>
@@ -21,7 +21,7 @@ export default {
   name: 'aboutUs',
   data () {
     return {
-
+      photoSrc:this.$globalData.photoSrc,
     }
   }
 }

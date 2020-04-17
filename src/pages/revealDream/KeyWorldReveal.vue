@@ -3,7 +3,10 @@
     <search-header @SearchClick="SearchClick"/>
     <classify-dropdown-menu  ref="ClassifyMenu" @firstClassifyClick="firstClassifyClick" @childClassifyClick="childClassifyClick"/>
     <div style="height:calc(100vh - 2.4rem)">
-      <reveal-lists :lists="revealDreamList" @listClick="listClick"/>
+      <reveal-lists :lists="revealDreamList" 
+                    @listClick="listClick" 
+                    @searchWordClick="searchWordClick" 
+                    @hotKeywordClick="hotKeywordClick"/>
     </div>
     
     <!-- 具体解析弹窗 -->
@@ -57,7 +60,7 @@ export default {
       })
     },
     SearchClick(val){
-      console.log(this)
+      // console.log(this)
       this.$refs.ClassifyMenu.firstActiveIndex = 0;
       this.$refs.ClassifyMenu.firstTitle = '全部父类'
       this.value = val;
@@ -82,11 +85,16 @@ export default {
     childClassifyClick(id){
       if( id == 0 ){
         revealDream(this.value,this.firstClassifyId);
-        console.log("子类选全部，用父类的去查")
+        // console.log("子类选全部，用父类的去查")
       }else{
         this.revealDream(this.value,id)
       }
-      
+    },
+    searchWordClick(e){
+      this.revealDreamList = e;
+    },
+    hotKeywordClick(word){
+      this.revealDream(word)
     }
   },
   mounted() {

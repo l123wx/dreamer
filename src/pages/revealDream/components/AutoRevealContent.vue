@@ -62,7 +62,7 @@ export default {
     select_reveal_dream({
 
     }).then(res=>{
-      console.log(res);
+      // console.log(res);
       this.lists = res.data;
     })
   }

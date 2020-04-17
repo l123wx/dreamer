@@ -118,7 +118,7 @@ export default {
       this.option.img = e.content;
       this.avaterDialogShow = true;
       // this.avatarType = e.type;
-      console.log(e.content)
+      // console.log(e.content)
     },
     // 点击裁剪弹窗的确认按钮
     avatarConfirm(){
@@ -128,7 +128,7 @@ export default {
           upload_head_photo_by_base64({
             base64Data:data
           }).then(res=>{
-            console.log(res)
+            // console.log(res)
             if( res.msg == '头像修改成功' ){
               this.userInfo.headPhotoUrl = res.data;
               localStorage.setItem('userInfo',JSON.stringify(this.userInfo));
@@ -167,7 +167,7 @@ export default {
   },
   mounted(){
     this.userInfo = this.$globalData.userInfo;
-    console.log(this.userInfo)
+    // console.log(this.userInfo)
   }
 }
 </script>

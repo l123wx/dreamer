@@ -9,11 +9,11 @@
            @click="dreamListClick(item.id)">
         <div class="title">{{item.title}}</div>
         <div class="iconfont">
-          <img v-if="!item.pictureCount && !item.voiceCount" src="@/assets/images/star.png" />
-          <img v-if="!item.pictureCount && item.voiceCount" src="@/assets/images/video.png" />
-          <img v-if="item.pictureCount" src="@/assets/images/picture.png" />
+          <img v-if="!item.pictureCount && !item.voiceCount" :src="photoSrc+'star.png'" />
+          <img v-if="!item.pictureCount && item.voiceCount" :src="photoSrc+'video.png'" />
+          <img v-if="item.pictureCount" :src="photoSrc+'picture.png'" />
         </div>
-        <div class="center">{{item.content}}</div>
+        <div class="center">{{item.content|spaceAndEnter}}</div>
         <div class="footer">
           <div class="date">{{item.dreamTime | yyyy.mm.dd}}<span v-if="!item.isPublic" class="iconfont">&#xe600;</span></div>
           <div class="time">{{item.dreamTime | timeWord}}</div>
@@ -36,7 +36,7 @@ export default {
   name: 'Content',
   data () {
     return {
-      
+      photoSrc: this.$globalData.photoSrc,
     }
   },
   props: {
@@ -104,7 +104,7 @@ export default {
     font-size: .24rem;
     line-height: .32rem;
     margin:.12rem 0;
-    min-height: 1.28rem;
+    min-height: 1.55rem;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 5;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="num" @click="click">宽：{{swidth}} 高：{{sheight}}</div>
-    <img src="@/assets/images/index/photo_2.jpg" 
+    <img :src="photoSrc+'index/photo_2.jpg'" 
          :class="typeNum"/>
   </div>
 </template>
@@ -16,6 +16,7 @@ export default {
       imgIndex:0,
       swidth:window.innerWidth,
       sheight:window.innerHeight,
+      photoSrc:this.$globalData.photoSrc,
     }
   },
   methods: {

@@ -10,9 +10,9 @@
           <!-- 标题 -->
           <div class="title">{{item.title}}</div>
           <div class="boundary">
-            <img src="@/assets/images/dreamWorld/boundary_l.png" />
-            <img class="star" src="@/assets/images/star-bf.png" />
-            <img src="@/assets/images/dreamWorld/boundary_r.png" />
+            <img :src="photoSrc+'dreamWorld/boundary_l.png'" />
+            <img class="star" :src="photoSrc+'star-bf.png'" />
+            <img :src="photoSrc+'dreamWorld/boundary_r.png'" />
           </div>
           <div class="content">
             <div>
@@ -25,8 +25,8 @@
                 <!-- 选项 -->
                 <div>
                   <div class="star">
-                    <img v-if="item.chooseComment == 1" src="@/assets/images/star.png" />
-                    <img v-else src="@/assets/images/star-bf.png" />
+                    <img v-if="item.chooseComment == 1" :src="photoSrc+'star.png'" />
+                    <img v-else :src="photoSrc+'star-bf.png'" />
                   </div>
                   <div @click.stop="evaluate" :data-index="0">
                     <div :data-index="0" :style="{'width':item.commentOneCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
@@ -39,8 +39,8 @@
                 <!-- 选项 -->
                 <div>
                   <div class="star">
-                    <img v-if="item.chooseComment == 2" src="@/assets/images/star.png" />
-                    <img v-else src="@/assets/images/star-bf.png" />
+                    <img v-if="item.chooseComment == 2" :src="photoSrc+'star.png'" />
+                    <img v-else :src="photoSrc+'star-bf.png'" />
                   </div>
                   <div @click.stop="evaluate" :data-index="1">
                     <div :data-index="1" :style="{'width':item.commentTwoCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
@@ -53,8 +53,8 @@
                 <!-- 选项 -->
                 <div>
                   <div class="star">
-                    <img v-if="item.chooseComment == 3" src="@/assets/images/star.png" />
-                    <img v-else src="@/assets/images/star-bf.png" />
+                    <img v-if="item.chooseComment == 3" :src="photoSrc+'star.png'" />
+                    <img v-else :src="photoSrc+'star-bf.png'" />
                   </div>
                   <div @click.stop="evaluate" :data-index="2">
                     <div :data-index="2" :style="{'width':item.commentThreeCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
@@ -67,8 +67,8 @@
                 <!-- 选项 -->
                 <div>
                   <div class="star">
-                    <img v-if="item.chooseComment == 4" src="@/assets/images/star.png" />
-                    <img v-else src="@/assets/images/star-bf.png" />
+                    <img v-if="item.chooseComment == 4" :src="photoSrc+'star.png'" />
+                    <img v-else :src="photoSrc+'star-bf.png'" />
                   </div>
                   <div @click.stop="evaluate" :data-index="3">
                     <div :data-index="3" :style="{'width':item.commentFourCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
@@ -105,7 +105,7 @@
             继续探索
           </button>
           <div>
-            继续探索需要花费星辰<img src="@/assets/images/star.png" />x2
+            继续探索需要花费星辰<img :src="photoSrc+'star.png'" />x2
           </div>
         </div>
       </swiper-slide>
@@ -122,6 +122,7 @@ export default {
     const that = this;
     return {
       itemIndex:0,
+      photoSrc: this.$globalData.photoSrc,
     }
   },
   methods:{
@@ -141,7 +142,7 @@ export default {
     },
     // 点击发表感想
     evaluate(e){
-      console.log(e.target.dataset.index)
+      // console.log(e.target.dataset.index)
       if(!this.lists[this.itemIndex].isSendComment){
         Dialog.confirm({
           message: '评论后就不能再修改咯，再想想吧',

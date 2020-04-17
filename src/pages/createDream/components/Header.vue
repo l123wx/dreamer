@@ -38,6 +38,7 @@ export default {
     touch-action: pan-y; 
   }
   .header{
+    user-select: none;
     height:1.28rem;
     line-height: 1.28rem;
     text-align: center;

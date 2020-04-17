@@ -4,9 +4,9 @@
       <input type="text" :readonly="!typePage || typePage=='read'" v-model="title" @click="input_click" @blur="input_blur" />
     </div>
     <div class="boundary">
-      <img src="@/assets/images/dreamWorld/boundary_l.png" />
-      <img class="star" src="@/assets/images/star.png" />
-      <img src="@/assets/images/dreamWorld/boundary_r.png" />
+      <img :src="photoSrc+'dreamWorld/boundary_l.png'" />
+      <img class="star" :src="photoSrc+'star.png'" />
+      <img :src="photoSrc+'dreamWorld/boundary_r.png'" />
     </div>
     <div class="message_box" @click="focus_textarea">
       <field v-model="message" 
@@ -20,6 +20,13 @@
              @focus="focus_textarea"
              :formatter="formatter"
              :readonly="!typePage || typePage=='read'"/>
+      <div>
+        <vedio v-for="(item,index) in vedioSrcLists" 
+             :key="index"
+             :audioSrc="item.src"
+             ref="vedio"
+             @deleteVedio="deleteVedio(index)"/>
+      </div>
     </div>
   </div>
 </template>
@@ -27,17 +34,20 @@
 <script>
 import { Field } from 'vant'
 import { get_dream_info } from "@/assets/javaScript/_axios"
+import Vedio from './Vedio'
 export default {
   name: 'Content',
   data () {
     return {
       title:'为梦境起个名字吧',
       message:'在这里输入输入内容',
-      dreamData:{}
+      dreamData:{},
+      photoSrc:this.$globalData.photoSrc,
     }
   },
   components: {
-    Field
+    Field,
+    Vedio,
   },
   props: {
     typePage: {
@@ -45,6 +55,9 @@ export default {
     },
     dreamId: {
       type:Number
+    },
+    vedioSrcLists: {
+      type:Array
     }
   },
   methods:{
@@ -70,12 +83,18 @@ export default {
       }
     },
     formatter(value){
-      // 过滤输入的数字
-      return value.replace(/\d/g, '');
+      //将空格和回车替换成占位符
+      // value=value.replace(/\<br \/\>/g,"\n");
+      return value;
+      // return value.replace(/\d/g, '');
+    },
+    deleteVedio(index){
+      // console.log(index)
+      this.$emit("deleteVedio",index);
     }
   },
   mounted(){
-    console.log(this.typePage)
+    // console.log(this.typePage)
     if(this.dreamId){
       this.title = ''
       this.message = ''
@@ -85,7 +104,7 @@ export default {
         // console.log(res)
         this.dreamData = res.data
         this.title = res.data.title
-        this.message = res.data.content
+        this.message = res.data.content.replace(/\<br\/\>/g,"\n");
       })
     }
   }
@@ -133,6 +152,6 @@ export default {
     font-size: .26rem;
   }
   .textarea{
-    min-height: calc(100vh - 2.94rem - 1.54rem);
+    /*min-height: calc(100vh - 2.94rem - 1.54rem);*/
   }
 </style>

@@ -2,7 +2,7 @@
   <div class="box">
     <div class="header">
       <span class="iconfont" @click="backClick">&#xe622;</span>
-      <img src="@/assets/images/notice/photo1.jpg" />
+      <img :src="photoSrc+'notice/photo1.jpg'" />
     </div>
     <div class="center">
       <div class="title">2020.03.03更新日志</div>
@@ -32,7 +32,7 @@ export default {
   name: 'NoticeDetails',
   data () {
     return {
-
+      photoSrc:this.$globalData.photoSrc,
     }
   },
   methods:{

@@ -5,7 +5,7 @@
           @click="menuOpen">&#xe62b;</span>
     <!-- 星星数量 -->
     <div class="starNbm">
-      <img src="@/assets/images/star.png" />
+      <img :src="photoSrc+'star.png'" />
       <span>{{starNum>999999?'999999+':starNum}}</span>
     </div>
   </div>
@@ -22,7 +22,7 @@ export default {
   },
   data () {
     return {
-     
+      photoSrc:this.$globalData.photoSrc,
     }
   },
   methods: {

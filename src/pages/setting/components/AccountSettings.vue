@@ -62,7 +62,7 @@ export default {
         check_username({
           username:this.username
         }).then(res=>{
-          console.log(res)
+          // console.log(res)
           if(res.status == 0){
             change_username({
               newUsername:this.username

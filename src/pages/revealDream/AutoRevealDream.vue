@@ -5,7 +5,7 @@
       自动解梦
     </div>
     <auto-reveal-content v-if="!pageIndex" @startReveal="startReveal" @listClick="listClick" />
-    <auto-reveal-result v-if="pageIndex" :dreamId="dreamId" :dreamTitle="dreamTitle" />
+    <auto-reveal-result v-if="pageIndex" :dreamId="dreamId" :dreamTitle="dreamTitle" @backTolists="pageIndex=0"/>
   </div>
 </template>
 

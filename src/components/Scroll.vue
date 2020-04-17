@@ -65,7 +65,7 @@ export default {
       this.$emit('onRefresh')
     },
     refreshSuccess(e){
-      console.log("1")
+      // console.log("1")
       this.isRefresh = e;
     },
     touchStart(e) {
@@ -101,7 +101,7 @@ export default {
         this.loadMoreText = '加载中'
         var i = 0;
         var LoadingText = setInterval(()=>{
-          console.log(this.loadMoreText);
+          // console.log(this.loadMoreText);
           if(i == 0){
             this.loadMoreText = '加载中.';
             i++;
@@ -134,7 +134,7 @@ export default {
     
     overflow:auto;
   }
-  .refresh_head{
+  .scroll >>> .van-pull-refresh__head{
     color:inherit;
   }
   /*加载更多*/
@@ -144,5 +144,6 @@ export default {
     text-align: center;
     margin-top: .2rem;
   }
+
 </style>
 
