@@ -1,5 +1,5 @@
 <template>
-  <div class="letter">
+  <div :class="['letter',isSafari?'isSafari':'']">
     <img :src="photoSrc+'revealDream/dreamRevealerIndex.jpg'" />
 
     <div class="header">
@@ -24,6 +24,7 @@ export default {
     return {
       letterList:[],
       photoSrc:this.$globalData.photoSrc,
+      isSafari:this.$globalData.isSafari,
     }
   },
   components: {
@@ -48,6 +49,9 @@ export default {
   .letter{
     height: 100vh;
     overflow: hidden
+  }
+  .letter.safari{
+    height:calc(100vh - 75px);
   }
   .letter>img{
     height: 100%;
@@ -76,5 +80,8 @@ export default {
     height:calc(100vh - 1.92rem);
     overflow: auto;
     padding:0 0 .6rem;
+  }
+  .safari .letter_box{
+    height:calc(100vh - 1.92rem - 75px);
   }
 </style>

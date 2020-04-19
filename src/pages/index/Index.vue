@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="num" @click="click">宽：{{swidth}} 高：{{sheight}}</div>
+  <div :class="[isSafari?'isSafari':'']">
+    <!-- <div class="num" @click="click">宽：{{swidth}} 高：{{sheight}}</div> -->
     <img :src="photoSrc+'index/photo_2.jpg'" 
          :class="typeNum"/>
   </div>
@@ -17,6 +17,7 @@ export default {
       swidth:window.innerWidth,
       sheight:window.innerHeight,
       photoSrc:this.$globalData.photoSrc,
+      isSafari:this.$globalData.isSafari,
     }
   },
   methods: {
@@ -65,6 +66,9 @@ export default {
     /*display: inline;*/
     left: 50%;
     transform:translate(-50%,0)
+  }
+  .isSafari .heihgt{
+    height: calc(100vh - 75px);
   }
   .num{
     position: absolute;

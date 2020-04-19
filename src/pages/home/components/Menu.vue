@@ -1,5 +1,5 @@
 <template>
-  <div class="menu_box">
+  <div :class="['menu_box',isSafari?'isSafari':'']">
     <!-- 蒙版 -->
     <menu-overlay :show="show" @overlayClick="menuClose"/>
     <div :class="['menu',show?'show':'']">
@@ -40,7 +40,7 @@ export default {
   },
   data () {
     return {
-
+      isSafari:this.$globalData.isSafari,
     }
   },
   methods: {
@@ -63,6 +63,9 @@ export default {
     height: 100vh;
     width: 100%;
   }
+  .menu_box.isSafari{
+    height: calc(100vh - 75px);
+  }
   .menu{
     position: absolute;
     height: 100vh;
@@ -72,6 +75,9 @@ export default {
     background-image: linear-gradient( to top, rgb(182,165,213) 0%, rgb(159,211,222) 100%);
     z-index: 6;
     transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .isSafari .menu{
+    height: calc(100vh - 75px);
   }
   .menu.show{
     left: 0;

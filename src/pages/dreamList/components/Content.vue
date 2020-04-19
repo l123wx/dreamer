@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div :class="['content',isSafari?'isSafari':'']">
     <div class="cardView" v-show="showType==0">
       <div v-if="!lists.length" class="tipOfNone">该梦境还没有梦噢</div>
       <!-- 卡片视图 -->
@@ -24,7 +24,8 @@
     <div class="listView" v-show="showType">
       <div v-for="(item,index) in lists" 
            class="dream_box"
-           :key="index">
+           :key="index"
+           @click="dreamListClick(item.id)">
         <div class="title">{{item.title}}</div>
       </div>
     </div>
@@ -37,6 +38,7 @@ export default {
   data () {
     return {
       photoSrc: this.$globalData.photoSrc,
+      isSafari:this.$globalData.isSafari,
     }
   },
   props: {
@@ -60,6 +62,9 @@ export default {
   .content>div:not(.loadMore){
     min-height: calc(100vh - 1.04rem - 1.28rem - 1.4rem);
     padding:0 .5rem 0.5rem;
+  }
+  .content>div:not(.loadMore).isSafari{
+    min-height: calc(100vh - 1.04rem - 1.28rem - 1.4rem - 75px);
   }
   /*梦境里没有梦的提醒*/
   .tipOfNone{
@@ -104,7 +109,7 @@ export default {
     font-size: .24rem;
     line-height: .32rem;
     margin:.12rem 0;
-    min-height: 1.55rem;
+    min-height: 1.5rem;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 5;

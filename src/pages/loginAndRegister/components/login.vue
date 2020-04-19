@@ -148,10 +148,12 @@ export default {
             Toast.clear();
             Toast.success((this.pageType=='login'?'登陆':'注册')+'成功');
             localStorage.setItem('token',res.data.token);
+            this.$globalData.token = res.data.token;
             // localStorage.setItem('userInfo',JSON.stringify(res.data));
             this.$globalData.userInfo = res.data;
             // console.log(res.data)
             this.$router.push('/home')
+            location.reload();
           }else{
             Notify({ type: 'danger', message: res.msg });
           }

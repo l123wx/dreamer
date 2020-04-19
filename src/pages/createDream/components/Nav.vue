@@ -32,7 +32,7 @@
           上滑取消或转文字
         </div>
         <div :class="['recordMenu',recordMenuShow?'active':'']">
-          松开手指，{{recordMenuActiveIndex==0?'取消发送':(recordMenuActiveIndex==1?'转换文字':'')}}
+          松开手指，{{recordMenuActiveIndex==0?'取消录音':(recordMenuActiveIndex==1?'转换文字':'')}}
           <div :class="['recordCancel',recordMenuActiveIndex==0?'active':'']">
             <div>
               <span class="iconfont">&#xe64e;</span><br/>
@@ -62,8 +62,8 @@ export default {
     return {
       ClockMenuShow: false,
       ClockActions: [
-        { name: '锁定这个梦' },
-        { name: '解锁这个梦' },
+        { name: '隐藏这个梦' },
+        { name: '公开这个梦' },
       ],
       recordActive:false,
       recordCountDownShow:false, //倒计时是否显示
@@ -188,7 +188,7 @@ export default {
     revise_dream(){
       this.$emit("revise_dream");
     },
-    // 锁定&解锁梦
+    //隐藏&公开梦
     clock_dream(){
       this.$emit("clock_dream");
     },

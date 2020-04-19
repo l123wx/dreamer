@@ -50,7 +50,7 @@ export default {
         this.eventInterval = setTimeout(function(){
           that.eventTouchTime++;
           that.$emit("deleteVedio");
-          // console.log("deleteVedio")
+          console.log("deleteVedio")
         },600);//这里设置定时
       },
       //手释放，如果在500毫秒内就释放，则取消长按事件，此时可以执行onclick应该执行的事件

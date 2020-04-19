@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div :class="['box',isSafari?'isSafari':'']">
     <img :src="photoSrc+'revealDream/dreamRevealerIndex.jpg'" />
     
     <div class="header">
@@ -9,11 +9,11 @@
     <div class="numbers">
       <div>
         <img :src="photoSrc+'star.png'" />
-        {{this.$globalData.userInfo.starsCount}}
+        {{starsCount}}
       </div>
       <div>
         <img :src="photoSrc+'tickets.png'" />
-        {{this.$globalData.userInfo.ticketCount}}
+        {{ticketCount}}
       </div>
     </div>
 
@@ -33,11 +33,15 @@
 
 <script>
 import { Dialog } from 'vant'
+import { get_user_info } from '@/assets/javaScript/_axios'
 export default {
   name: 'DreamRevealerIndex',
   data () {
     return {
       photoSrc:this.$globalData.photoSrc,
+      isSafari:this.$globalData.isSafari,
+      ticketCount:0,
+      starsCount:0,
     }
   },
   methods: {
@@ -48,12 +52,21 @@ export default {
       this.$router.push('/RevealDreamLetter')
     },
     startReveal(){
-      if(this.$globalData.userInfo.ticketCount <= 0){
+      if(this.ticketCount <= 0){
         Dialog({message:'解梦券数量不足'})
       }else{
         this.$router.push('/DreamRevealerIng')
       }
     }
+  },
+  mounted(){
+    get_user_info({
+      token:this.$globalData.token
+    }).then(res=>{
+      this.$globalData.userInfo = res.data;
+      this.ticketCount = res.data.ticketCount;
+      this.starsCount = res.data.starsCount;
+    })
   }
 }
 </script>
@@ -62,6 +75,9 @@ export default {
   .box{
     height: 100vh;
     overflow: hidden
+  }
+  .isSafari.box{
+    height:calc(100vh - 75px);
   }
   .box>img{
     height: 100%;

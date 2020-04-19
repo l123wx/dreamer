@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div :class="['box',isSafari?'isSafari':'']">
     <img :src="photoSrc+'login/logo.png'" />
     <login />
   </div>
@@ -13,6 +13,7 @@ export default {
   data () {
     return {
       photoSrc:this.$globalData.photoSrc,
+      isSafari:this.$globalData.isSafari,
     }
   },
   components: {
@@ -23,7 +24,7 @@ export default {
   },
   mounted(){
     if(this.$globalData.token){
-      alert(this.$globalData.token)
+      // alert(this.$globalData.token)
       auto_login({
       }).then(res=>{
         // console.log(res)
@@ -59,6 +60,9 @@ export default {
     height:100vh;
     background-color: #201624;
     text-align: center;
+  }
+  .box.isSafari{
+    height:calc(100vh - 75px);
   }
   img{
     height:2.72rem;

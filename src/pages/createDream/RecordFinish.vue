@@ -103,7 +103,7 @@ export default {
     background-color: #f2f2f2;
     height: 100vh;
     position: relative;
-  }  
+  }
   .header{
     height: 1.28rem;
     line-height: 1.28rem;

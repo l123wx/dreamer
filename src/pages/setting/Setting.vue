@@ -1,5 +1,5 @@
 <template>
-  <div class="setting">
+  <div :class="['setting',isSafari?'isSafari':'']">
     <setting-header :title="title" @backClick="backClick" />
     <div class="content">
       <!-- 设置页首页 -->
@@ -38,7 +38,8 @@ export default {
       settingPage:0,
       title:"设置",
       presettingPage:[],
-      pageIndex:0
+      pageIndex:0,
+      isSafari:this.$globalData.isSafari,
     }
   },
   watch:{
@@ -73,8 +74,14 @@ export default {
     background-color:#090614;
     height:100vh;
   }
+  .setting.isSafari{
+    height:calc(100vh - 75px);
+  }
   .content{
     height:calc(100vh - 1.28rem);
     overflow: auto;
+  }
+  .isSafari .content{
+    height:calc(100vh - 1.28rem - 75px);
   }
 </style>

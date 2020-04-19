@@ -1,10 +1,10 @@
 <template>
-  <div class="auto_content">
+  <div :class="['auto_content',isSafari?'isSafari':'']">
     <div class="head">
       <span>请选择一个梦境</span>
       <span>
-        <span v-show="!sortType" @click="upSortClick" class="iconfont">&#xe63f;</span>
-        <span v-show="sortType" @click="downSortClick" class="iconfont">&#xe63e;</span>
+        <span v-show="!sortType" @click="upSortClick" class="iconfont">&#xe63e;</span>
+        <span v-show="sortType" @click="downSortClick" class="iconfont">&#xe63f;</span>
       </span>
     </div>
     <ul class="lists">
@@ -35,7 +35,8 @@ export default {
     return {
       sortType:0, 
       listActiveIndex:-1,
-      lists:[]
+      lists:[],
+      isSafari:this.$globalData.isSafari,
     }
   },
   methods: {
@@ -90,6 +91,9 @@ export default {
     color: #fff;
     height: calc(100vh - 4.6rem);
     overflow: auto;
+  }
+  .auto_content.isSafari .lists{
+    height: calc(100vh - 4.6rem -75px);
   }
   .auto_content .lists>li{
     height: .74rem;

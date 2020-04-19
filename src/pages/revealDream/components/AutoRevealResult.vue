@@ -91,6 +91,7 @@ export default {
       dreamDialogData:{},
       revealPreciseResult:[],//自动解梦的精确解释合集
       preciseResultDialogshow:true,//精确结果弹窗
+      isSafari:this.$globalData.isSafari,
     }
   },
   props:{

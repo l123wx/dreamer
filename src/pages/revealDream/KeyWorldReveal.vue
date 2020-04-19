@@ -1,8 +1,8 @@
 <template>
-  <div class="box">
+  <div :class="['box',isSafari?'isSafari':'']">
     <search-header @SearchClick="SearchClick"/>
     <classify-dropdown-menu  ref="ClassifyMenu" @firstClassifyClick="firstClassifyClick" @childClassifyClick="childClassifyClick"/>
-    <div style="height:calc(100vh - 2.4rem)">
+    <div :style="[isSafari?'height:calc(100vh - 2.4rem - 75px)':'height:calc(100vh - 2.4rem)']">
       <reveal-lists :lists="revealDreamList" 
                     @listClick="listClick" 
                     @searchWordClick="searchWordClick" 
@@ -37,7 +37,8 @@ export default {
       dreamDialogData:{},
       value:'',
       firstClassifyId:0,
-      childClassifyId:0
+      childClassifyId:0,
+      isSafari:this.$globalData.isSafari,
     }
   },
   components: {
@@ -118,6 +119,9 @@ export default {
     background-color: #090614;
     height: 100vh;
     overflow: hidden
+  }
+  .box.isSafari{
+    height: calc(100vh - 75px);
   }
   .reveal_box{
     padding: .58rem .46rem;

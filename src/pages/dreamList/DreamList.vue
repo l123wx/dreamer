@@ -1,5 +1,5 @@
 <template>
-  <div class="box" :style="{'background-image':bgColor}" :class="colorType">
+  <div :class="['box',isSafari?'isSafari':'',colorType]" :style="{'background-image':bgColor}">
     <dream-list-header :dreamtitle="title" />
     <dream-list-scroll :showType="showType" 
                        :ifLoadMore="false" 
@@ -31,7 +31,7 @@
                   description="排序方式"
                   close-on-click-action/>
 
-    <!-- 锁定&解锁 弹出菜单 -->
+    <!-- 隐藏&公开 弹出菜单 -->
     <clock-action-sheet v-model="ClockMenuShow" 
                   :actions="ClockActions" 
                   @select="clockOnSelect" 
@@ -63,6 +63,7 @@ export default {
   data () {
     that = this;
     return {
+      isSafari:this.$globalData.isSafari,
       columnId: 0,
       lists:[],
       bgColor: '',
@@ -81,8 +82,8 @@ export default {
         { name: '按时间倒序排序' },
       ],
       ClockActions: [
-        { name: '全部锁定' },
-        { name: '全部解锁' },
+        { name: '全部隐藏' },
+        { name: '全部公开' },
       ],
     }
   },
@@ -92,18 +93,14 @@ export default {
       // 可以通过 close-on-click-action 属性开启自动收起
       // this.show = false;
       // Toast(item.name);
-      if(item.name == "按时间正序排序"){
+      if(item.name == "按时间倒序排序"){
         const newArr = this.lists.sort((a, b) => a.dreamTime > b.dreamTime ? 1 : -1)
         this.lists = newArr;
       }else{
         const newArr = this.lists.sort((a, b) => a.dreamTime < b.dreamTime ? 1 : -1)
         this.lists = newArr;
       }
-      Notify({ 
-        message: '已'+item.name,
-        duration: 2000,
-        background: 'rgba(0,0,0,0.5)'
-      });
+      Notify({type: 'success',message: '已'+item.name});
     },
     viewOnSelect(item) { //视图设置
       if(item.name == "卡片视图"){
@@ -111,24 +108,19 @@ export default {
       }else{
         this.showType = 1
       }
-      Notify({ 
-        type: 'success', 
-        message: '已经切换为'+item.name,
-        duration: 2000,
-        background: 'rgba(0,0,0,0.5)'
-      });
+      Notify({ type: 'success', message: '已经切换为'+item.name});
     },
-    // 锁定与解锁菜单选择
+    // 隐藏与公开菜单选择
     clockOnSelect(item){
-      if(item.name == "全部锁定"){
+      if(item.name == "全部隐藏"){
         // console.log("全部锁定")
         Dialog.confirm({
-          message: '确定要锁定全部的梦吗',
+          message: '确定要隐藏全部的梦吗',
          }).then(res=>{
             locked_dream_list({
               columnId:that.columnId,
               type:0
-            }).then(res=>{ //锁定修改成功
+            }).then(res=>{ //隐藏修改成功
               //更新数据
               get_dream_list({ 
                 columnId: that.columnId
@@ -136,23 +128,19 @@ export default {
                 that.lists = res.data;
                 // console.log(res)
                 //成功提醒
-                Notify({ 
-                  message: '已将所有的梦锁定',
-                  duration: 2000,
-                  background: 'rgba(0,0,0,0.5)'
-                });
+                Notify({type:'success',message: '已将所有的梦隐藏'});
               })
             })
          })
       }else{
-        // console.log("全部解锁")
+        // console.log("全部公开")
         Dialog.confirm({
-          message: '确定要解锁全部的梦吗',
+          message: '确定要公开全部的梦吗',
         }).then(res=>{
           locked_dream_list({
             columnId:that.columnId,
             type:1
-          }).then(res=>{ //解锁修改成功
+          }).then(res=>{ //公开修改成功
             //更新数据
             get_dream_list({ 
               columnId: that.columnId
@@ -160,11 +148,7 @@ export default {
               that.lists = res.data;
               // console.log(res)
               //成功提醒
-              Notify({ 
-                message: '已将所有的梦解锁',
-                duration: 2000,
-                background: 'rgba(0,0,0,0.5)'
-              });
+              Notify({type: 'success',message: '已将所有的梦公开',});
             })
           })
         })
@@ -173,7 +157,7 @@ export default {
     sortClick() { //排序按钮
        this.SortMenuShow = true;
     },
-    clockDream() { //锁定&解锁按钮
+    clockDream() { //锁定&公开按钮
       this.ClockMenuShow = true;
     },
     viewClick() { //视图切换按钮
@@ -235,8 +219,14 @@ export default {
   .box{
     height:100vh;
   }
+  .box.isSafari{
+    height:calc(100vh - 75px);
+  }
   .scroll{
     height: calc(100vh - 1.04rem - 1.28rem);
+  }
+  .isSafari .scroll{
+    height: calc(100vh - 1.04rem - 1.28rem - 75px);
   }
   .white{
     color:#fff;

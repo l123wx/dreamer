@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div :class="['box',isSafari?'isSafari':'']">
     <div class="header">
       <span class="iconfont" @click="backClick">&#xe622;</span>
       <img :src="photoSrc+'notice/photo1.jpg'" />
@@ -33,6 +33,7 @@ export default {
   data () {
     return {
       photoSrc:this.$globalData.photoSrc,
+      isSafari:this.$globalData.isSafari,
     }
   },
   methods:{
@@ -48,6 +49,9 @@ export default {
     height:100vh;
     background-color: #090614;
     color: #fff;
+  }
+  .box.isSafari{
+    height:calc(100vh - 75px);
   }
   .header{
     height: 2.55rem;
@@ -76,6 +80,9 @@ export default {
     height: calc( 100vh - 2.55rem);
     overflow: auto;
     padding:0 .3rem;
+  }
+  .isSafari .center{
+    height:calc(100vh - 2.55rem -75px);
   }
   .title{
     font-size: .36rem;

@@ -2,7 +2,7 @@
   <div class="setting_index">
     <div class="user_info">
       <div class="avater">
-        <uploader :after-read="afterRead" :max-count="1">
+        <uploader :after-read="afterRead" :max-count="1" max-size="3145728" @oversize="oversize">
           <img :src="userInfo.headPhotoUrl" />
         </uploader>
       </div>
@@ -74,15 +74,15 @@
 
 <script>
 const Base64 = require('js-base64').Base64
-import { Dialog,Uploader } from 'vant'
+import { Dialog,Uploader,Notify } from 'vant'
 // 头像裁剪组件来源：https://github.com/xyxiao001/vue-cropper
 import { VueCropper }  from 'vue-cropper'
-import { exit_login,change_user_motto,upload_head_photo_by_base64 } from '@/assets/javaScript/_axios'
+import { exit_login,change_user_motto,upload_head_photo_by_base64,get_user_info } from '@/assets/javaScript/_axios'
 export default {
   name: 'SettingIndex',
   data () {
     return {
-      userInfo:{},
+      userInfo:this.$globalData.userInfo,
       mottoType: 0, // 座右铭状态 0:展示 1：修改中
       avaterDialogShow: false,
       option: {
@@ -120,20 +120,28 @@ export default {
       // this.avatarType = e.type;
       // console.log(e.content)
     },
+    //图片大小超出5m
+    oversize(){
+      Dialog({message:'图片大小不得超出3M'})
+    },
     // 点击裁剪弹窗的确认按钮
     avatarConfirm(){
       this.$refs.cropper.getCropData((data) => {
         //裁切生成的base64图片
-          // console.log(data);
-          upload_head_photo_by_base64({
-            base64Data:data
-          }).then(res=>{
-            // console.log(res)
-            if( res.msg == '头像修改成功' ){
-              this.userInfo.headPhotoUrl = res.data;
-              localStorage.setItem('userInfo',JSON.stringify(this.userInfo));
-            }
-          })
+        // console.log(data);
+        upload_head_photo_by_base64({
+          base64Data:data
+        }).then(res=>{
+          // console.log(res)
+          if( res.msg == '头像修改成功' ){
+            Notify({ type: 'success', message: '头像修改成功'});
+            this.userInfo.headPhotoUrl = res.data;
+            this.$globalData.userInfo = this.userInfo;
+            // localStorage.setItem('userInfo',JSON.stringify(this.userInfo));
+          }
+        }).catch( err=>{
+          Notify({type:'fail',message:'修改失败，请重试'})
+        })
       })
     },
     //账号设置
@@ -158,7 +166,9 @@ export default {
       }).then(() => {
         exit_login({})
         .then(res=>{
-          this.$router.push('/LoginAndRegister')
+          localStorage.removeItem('token');
+          this.$router.replace({path: '/LoginAndRegister'});
+          location.reload();
         })
       }).catch(() => {
         // on cancel
@@ -166,8 +176,14 @@ export default {
     }
   },
   mounted(){
-    this.userInfo = this.$globalData.userInfo;
+    // this.userInfo = this.$globalData.userInfo;
     // console.log(this.userInfo)
+    get_user_info({
+      token:this.$globalData.token
+    }).then(res=>{
+      this.$globalData.userInfo = res.data;
+      this.userInfo = res.data;
+    })
   }
 }
 </script>

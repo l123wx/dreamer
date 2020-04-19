@@ -6,9 +6,9 @@ if(localStorage.getItem('token')){
 
 // 图片地址
 // const photoSrcStatic = './static/images/'//本地
-const photoSrcStatic = 'http://mjlr-file.smtboy.com/'//服务器
-// const photoSrc = '@/assets/images/'//本地
-const photoSrc = 'http://mjlr-file.smtboy.com/'//服务器
+const photoSrcStatic = 'https://mjlr-file.smtboy.com/'//服务器
+// const photoSrc = './static/images/'//本地
+const photoSrc = 'https://mjlr-file.smtboy.com/'//服务器
 
 // 用户的个人信息
 let userInfo = {};
@@ -99,11 +99,21 @@ const homeMenu = [
         }
       ]
 
+// 判断浏览器是否为safari
+let isSafari = false;
+// if(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)){
+//   isSafari = true;
+// }else{
+//   isSafari = false;
+// }
+
+
 export default{
   userInfo,
   token,   //用户token信息
   homeMenu,
   homeDreamLists,
   photoSrc,
-  photoSrcStatic
+  photoSrcStatic,
+  isSafari
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class='box'>
+  <div :class="['box',isSafari?'isSafari':'']">
     <!-- 0:未收藏 1：已收藏 -->
     <dream-world-header :stared='stared' 
                         @admireClick="admireClick"
@@ -30,7 +30,8 @@
     <dream-world-swiper :lists="lists"
                         @addDream="addDream"
                         @indexChange="indexChange"
-                        @evaluate="evaluate"/>
+                        @evaluate="evaluate"
+                        :vedioSrcLists="vedioSrcLists"/>
   
   </div>
 </template>
@@ -39,7 +40,7 @@
 import DreamWorldHeader from './components/Header'
 import DreamWorldSwiper from './components/Swiper'
 import { Dialog,Field,Notify,Toast } from 'vant'
-import { enter_dream_world,send_message,send_comment,read_dream } from '@/assets/javaScript/_axios.js'
+import { enter_dream_world,send_message,send_comment,read_dream,select_dream_voice } from '@/assets/javaScript/_axios.js'
 import axios from 'axios'
 export default { 
   name: 'DreamWorld',
@@ -52,6 +53,8 @@ export default {
       addIf: 1, //是否还能继续请求梦
       dreamIndex:0, 
       stared:0, //头部星星图标是否为已发送留言 -1:不显示 0:未收藏 1:已收藏
+      isSafari:this.$globalData.isSafari,
+      vedioSrcLists:[],//语音文件/src {src,type:0 新语音 ：1旧语音}
     }
   },
   components: {
@@ -84,25 +87,29 @@ export default {
           message: '内容不能为空！'
         }).then(() => {});
       }else{
-        // 弹窗提醒
-        Dialog.confirm({
-          message: '确定要花费两颗星辰给对方留言吗'
-        }).then(() => {
-          send_message({
-            dreamId:this.lists[this.dreamIndex].id,
-            content:this.value,
-            dreamUserId:this.lists[this.dreamIndex].userId,
-          }).then(res=>{
-            this.admireShow = false;
-            //留言成功后更新星星状态
-            this.lists[this.dreamIndex].isSendMsg = 1;
-            this.checkStarType(this.dreamIndex)
-            this.value = ''
-            Toast.success('留言成功');
-          })
-        }).catch((err) => {
-            // console.log(err)
-        });
+        if( this.$globalData.userInfo.starsCount > 0 ){
+          // 弹窗提醒
+          Dialog.confirm({
+            message: '确定要花费两颗星辰给对方留言吗'
+          }).then(() => {
+            send_message({
+              dreamId:this.lists[this.dreamIndex].id,
+              content:this.value,
+              dreamUserId:this.lists[this.dreamIndex].userId,
+            }).then(res=>{
+              this.admireShow = false;
+              //留言成功后更新星星icon状态
+              this.lists[this.dreamIndex].isSendMsg = 1;
+              this.checkStarType(this.dreamIndex)
+              this.value = ''
+              Toast.success('留言成功');
+            })
+          }).catch((err) => {
+              // console.log(err)
+          });
+        }else{
+          Dialog({message:'星辰数量不足'})
+        }
       }
     },
     // 取消留言
@@ -139,6 +146,7 @@ export default {
         // console.log(res.data)
         Object.assign(this.lists[this.dreamIndex],res.data);
         this.lists[this.dreamIndex].chooseComment = index*1+1;
+        localStorage.setItem('dreamWorldData',JSON.stringify(this.lists));
         // console.log(this.lists)
       })
     },
@@ -156,23 +164,33 @@ export default {
         pageNum:this.pageNum,
         pageSize:5,
       }).then(res=>{
+        let reslists = res.data;
         if(res.msg == "星辰数量不足"){
           Dialog({message:'星辰数量不足'})
         }else{
           // console.log(res)
           if( this.lists.length ){
-            const newArr = [ ...this.lists, ...res.data.list] //合并两个数组
+            const newArr = [ ...this.lists, ...reslists.list] //合并两个数组
             this.lists = newArr;
           }else{
-            this.lists = res.data.list
+            this.lists = reslists.list
           }
-          if(res.data.nextPage || res.data.nextPage == res.data.lastPage || !res.data.hasNextPage){
-            this.addIf = 0;
+          if(reslists.nextPage || reslists.nextPage == reslists.lastPage || !reslists.hasNextPage){
+            this.addIf = 0; 
           }
           this.checkStarType(this.dreamIndex);
-          this.readDream(res.data.list)
-          res.data.list = this.lists;
-          localStorage.setItem('dreamWorldData',JSON.stringify(res.data));
+          this.readDream(reslists.list)
+          reslists.list = this.lists;
+          // for(let item in reslists.list){
+          //   console.log(reslists)
+          //   select_dream_voice({
+          //     dreamId:reslists.list[item].id
+          //   }).then(resolve=>{
+          //     reslists.list[item].vedioSrcLists = resolve.data;
+          //   })
+          // }
+          // console.log(reslists)
+          localStorage.setItem('dreamWorldData',JSON.stringify(reslists));
         }
       }).catch(err=>{
         // console.log(err)
@@ -196,7 +214,7 @@ export default {
       this.loadDream()
     }else{
       this.lists = JSON.parse(localStorage.getItem('dreamWorldData')).list
-    } 
+    }
   },
   watch:{
     dreamIndex(e){
@@ -212,6 +230,9 @@ export default {
     height:100vh;
     overflow: hidden;
     touch-action: pan-y; 
+  }
+  .isSafari.box{
+    height:calc(100vh - 75px);
   }
   .leaveWord{
     background-color: #201624;

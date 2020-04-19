@@ -1,5 +1,5 @@
 <template>
-  <div class="auto_reveal">
+  <div :class="['auto_reveal',isSafari?'isSafari':'']">
     <div class="header">
       <span class="iconfont" @click="backClick">&#xe650;</span>
       自动解梦
@@ -19,7 +19,8 @@ export default {
     return {
       pageIndex:0,
       dreamId:-1,
-      dreamTitle: '一个奇妙的梦'
+      dreamTitle: '一个奇妙的梦',
+      isSafari:this.$globalData.isSafari,
     }
   },
   components: {
@@ -50,6 +51,9 @@ export default {
     background-color: #090614;
     height: 100vh;
     overflow: hidden;
+  }
+  .auto_reveal.isSafari{
+    height:calc(100vh - 75px);
   }
   .header{
     height: 1.28rem;

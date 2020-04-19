@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div :class="['box',isSafari?'isSafari':'']">
     <!-- 主要内容部分 -->
     <div :class="colorType">
       <!-- home页导航栏 -->
@@ -48,6 +48,7 @@ export default {
   data () {
     that = this;
     return {
+      isSafari:this.$globalData.isSafari,
       meunShow:false,
       imgIndex: 0,
       colorType:'white',
@@ -153,8 +154,14 @@ export default {
     position: relative;
     overflow: hidden;
   }
+  .box.isSafari{
+    height:calc(100vh - 75px);
+  }
   .box>div:nth-child(1){
     height:100vh;
+  }
+  .isSafari.box>div:nth-child(1){
+    height:calc(100vh - 75px);
   }
   .box>div:nth-child(1)>div{
     position: relative;
@@ -170,11 +177,17 @@ export default {
     height: 100vh;
     width: 100%;
   }
+  .isSafari .bgColot{
+    height:calc(100vh - 75px);
+  }
   .bgColor>div{
     position: absolute;
     top:0;
     height: 100vh;
     width: 100%;
+  }
+  .isSafari .bgColot>div{
+    height:calc(100vh - 75px);
   }
   .sentence{
     padding:.1rem 0;

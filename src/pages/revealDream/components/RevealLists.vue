@@ -20,15 +20,7 @@ export default {
   name: 'RevealLists',
   data () {
     return {
-      searchWords:[
-        '被狗咬',
-        '棺材',
-        '发大水',
-        '蛇',
-        '怀孕',
-        '生孩子',
-        '鱼'
-      ]
+      searchWords:[]
     }
   },
   props:{
@@ -54,11 +46,12 @@ export default {
     },
   },
   mounted(){
-    // hot_search_keys({
-
-    // }).then(res=>{
-    //   console.log(res)
-    // })
+    hot_search_keys({
+    }).then(res=>{
+      for(var i = 0; i<10; i++){
+        this.searchWords.push(res.data[i])
+      }
+    })
   }
 }
 </script>

@@ -43,7 +43,7 @@
       />
     </popup>
 
-    <!-- 锁定&解锁 弹出菜单 -->
+    <!-- 隐藏&公开 弹出菜单 -->
     <clock-action-sheet v-model="ClockMenuShow" 
                   :actions="ClockActions" 
                   @select="clockOnSelect" 
@@ -277,7 +277,9 @@ export default {
     },
     // 删除一条语音
     deleteVedio(index){
-      if(this.typePage == 'create'){
+      console.log(this.typePage)
+      if(this.typePage == "create" || this.typePage=="revise"){
+        console.log("deleteVedio")
         Dialog.confirm({
           message: '确定要删除这条语音吗'
         }).then(() => {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="[isSafari?'isSafari':'']">
     <swiper class="my-swipe" 
             id="wd_swiper" 
             @slideChange="indexChange">
@@ -15,9 +15,15 @@
             <img :src="photoSrc+'dreamWorld/boundary_r.png'" />
           </div>
           <div class="content">
+            <div v-html="item.content">
+              <!-- 文字内容 --><!-- 
+              {{item.content}} -->
+            </div>
             <div>
-              <!-- 文字内容 -->
-              {{item.content}}
+              <vedio v-for="(i,index) in item.vedioSrcLists"
+                   :key="index"
+                   :audioSrc="i.src"
+                   ref="vedio"/>
             </div>
             <div class="evaluate">
               <div>留下你的感想</div>
@@ -29,7 +35,7 @@
                     <img v-else :src="photoSrc+'star-bf.png'" />
                   </div>
                   <div @click.stop="evaluate" :data-index="0">
-                    <div :data-index="0" :style="{'width':item.commentOneCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
+                    <div :data-index="0" :style="{'width':item.isSendComment==0?'0':item.commentOneCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
                     <span :data-index="0">真是个有趣的梦</span>
                     <span :data-index="0" v-if="item.isSendComment">
                       {{(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)==0?0:(item.commentOneCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+" ").substr(0,4)}}%
@@ -43,7 +49,7 @@
                     <img v-else :src="photoSrc+'star-bf.png'" />
                   </div>
                   <div @click.stop="evaluate" :data-index="1">
-                    <div :data-index="1" :style="{'width':item.commentTwoCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
+                    <div :data-index="1" :style="{'width':item.isSendComment==0?'0':item.commentTwoCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
                     <span :data-index="1">摸摸头</span>
                     <span :data-index="1" v-if="item.isSendComment">
                       {{(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)==0?0:(item.commentTwoCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+" ").substr(0,4)}}%
@@ -57,7 +63,7 @@
                     <img v-else :src="photoSrc+'star-bf.png'" />
                   </div>
                   <div @click.stop="evaluate" :data-index="2">
-                    <div :data-index="2" :style="{'width':item.commentThreeCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
+                    <div :data-index="2" :style="{'width':item.isSendComment==0?'0':item.commentThreeCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
                     <span :data-index="2">这个梦好奇葩</span>
                     <span :data-index="2" v-if="item.isSendComment">
                       {{(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)==0?0:(item.commentThreeCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+" ").substr(0,4)}}%
@@ -71,7 +77,7 @@
                     <img v-else :src="photoSrc+'star-bf.png'" />
                   </div>
                   <div @click.stop="evaluate" :data-index="3">
-                    <div :data-index="3" :style="{'width':item.commentFourCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
+                    <div :data-index="3" :style="{'width':item.isSendComment==0?'0':item.commentFourCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+'%'}"></div>
                     <span :data-index="3">做过类似的梦</span>
                     <span :data-index="3" v-if="item.isSendComment">
                       {{(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)==0?0:(item.commentFourCount*1/(item.commentOneCount+item.commentTwoCount+item.commentThreeCount+item.commentFourCount)*100+" ").substr(0,4)}}%
@@ -116,6 +122,7 @@
 <script>
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import { Dialog } from 'vant'
+import Vedio from '../../createDream/components/Vedio'
 export default {
   name: 'wd-Swiper',
   data () {
@@ -123,6 +130,7 @@ export default {
     return {
       itemIndex:0,
       photoSrc: this.$globalData.photoSrc,
+      isSafari:this.$globalData.isSafari,
     }
   },
   methods:{
@@ -161,12 +169,13 @@ export default {
   },
   components: {
     swiper,
-    swiperSlide
+    swiperSlide,
+    Vedio
   },
   props: {
     lists: {
       type: Array
-    }
+    },
   }
 }
 </script>
@@ -222,10 +231,21 @@ export default {
     height: calc(100vh - 5.6rem);
     overflow-y: auto; 
   }
+  .content >>> div>div>.video_box{
+    // background-image:linear-gradinet(to right ,#110b19 ,#35253e);
+    background-image:linear-gradient( to right, #110b19 0%, #35253e 100%);
+    color: #9c9c9c;
+  }
+  .isSafari .content{
+    height: calc(100vh - 5.6rem - 75px);
+  }
   /*梦境文章内容*/
   .content>div:nth-child(1){
     padding-bottom: .5rem;
     min-height: calc(100vh - 11rem);
+  }
+  .isSafari .content>div:nth-child(1){
+    min-height: calc(100vh - 11rem - 75px);
   }
   /*感想*/
   .evaluate{

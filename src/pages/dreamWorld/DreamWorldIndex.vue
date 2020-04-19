@@ -39,12 +39,13 @@ export default {
           if(res.msg == "星辰数量不足"){
             Dialog({message:'星辰数量不足'})
           }else{
-            if( res.data.list.length < 5 ){
-              Dialog.alert({
+            if( !res.data.hasNextPage || res.data.nextPage <= res.data.prePage || res.data.list.length < 5 ){
+              Dialog({
                 message: '哦豁！已经没有梦啦，下次再来吧'
               })
             }else{
               this.$router.push("DreamWorld");
+              localStorage.setItem('dreamWorldData',JSON.stringify(res.data));
               this.readDream(res.data.list)
             }
           }

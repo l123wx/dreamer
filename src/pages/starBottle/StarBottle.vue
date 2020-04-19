@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div :class="['box',isSafari?'isSafari':'']">
     <star-bottle-header />
     <star-bottle-item-number @getTickets="getTickets" 
                              @getStar="getStar"
@@ -72,7 +72,8 @@ export default {
       starNbm:0,
       ticketsNbm:0,
       sendLists:[],
-      getLists:[]
+      getLists:[],
+      isSafari:this.$globalData.isSafari,
     }
   },
   methods: {
@@ -148,6 +149,9 @@ export default {
     background-color: #090614;
     color:#fff;
     padding: 0 .32rem;
+  }
+  .isSafari.box{
+    height: calc(100vh - 75px);
   }
   .get_Star_popup,.get_tickets_popup{
     height:5rem;

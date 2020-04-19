@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div :class="['box',isSafari?'isSafari':'']">
     <div class="header">
       <span class="iconfont" @click="backClick">&#xe650;</span>
       解梦师解梦
@@ -33,7 +33,8 @@ export default {
     return {
       show:false,
       message:'',
-      dreamId:-1
+      dreamId:-1,
+      isSafari:this.$globalData.isSafari,
     }
   },
   components: {
@@ -84,6 +85,9 @@ export default {
     height:100vh;
     overflow: hidden;
     background-color: #090614;
+  }
+  .box.isSafari{
+    height:calc(100vh - 75px);
   }
   .header{
     height: 1.28rem;

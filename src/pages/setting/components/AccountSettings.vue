@@ -29,7 +29,7 @@
 
 <script>
 import { Dialog,Notify } from 'vant'
-import { check_username,change_username } from '@/assets/javaScript/_axios'
+import { check_username,change_username,get_user_info } from '@/assets/javaScript/_axios'
 export default {
   name: 'AccountSettings',
   data () {
@@ -68,7 +68,13 @@ export default {
               newUsername:this.username
             }).then(res=>{
               if(res.data == '修改用户名成功'){
-                Notify({ type: 'success', message: '修改用户名成功' });
+                Notify({ type: 'success', message: '修改成功' });
+                this.userNameShow = false;
+                get_user_info({
+                  token:this.$globalData.token
+                }).then(res=>{
+                  this.$globalData.userInfo = res.data;
+                })
               }else{
                 Notify({ type: 'danger', message: '未知错误，请重试' });
               }

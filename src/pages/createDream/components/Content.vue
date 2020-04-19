@@ -89,7 +89,7 @@ export default {
       // return value.replace(/\d/g, '');
     },
     deleteVedio(index){
-      // console.log(index)
+      console.log("deleteVedio")
       this.$emit("deleteVedio",index);
     }
   },
