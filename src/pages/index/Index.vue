@@ -2,7 +2,10 @@
   <div :class="[isSafari?'isSafari':'']">
     <!-- <div class="num" @click="click">宽：{{swidth}} 高：{{sheight}}</div> -->
     <img :src="photoSrc+'index/photo_2.jpg'" 
-         :class="typeNum"/>
+         :class="typeNum"
+         v-if="isMobile"/>
+    <p style="line-height: 100vh;text-align: center;font-size: 1.5rem;"
+       v-if="!isMobile">请使用手机打开</p>
   </div>
 </template>
 
@@ -18,6 +21,7 @@ export default {
       sheight:window.innerHeight,
       photoSrc:this.$globalData.photoSrc,
       isSafari:this.$globalData.isSafari,
+      isMobile:false,
     }
   },
   methods: {
@@ -30,9 +34,14 @@ export default {
     
   },
   created(){
-    setTimeout(function() {
-      that.$router.push("/loginAndRegister");
-    },3000)
+    if( this.swidth <= 1024 ) {
+      this.isMobile = true;
+      setTimeout(function() {
+        that.$router.push("/loginAndRegister");
+      },3000)
+    } else {
+      this.isMobile = false
+    }
   },
   computed:{
     typeNum: {

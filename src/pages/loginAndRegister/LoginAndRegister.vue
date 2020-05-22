@@ -31,7 +31,7 @@ export default {
         if(res.status == 0){
           // localStorage.setItem('userInfo',JSON.stringify(res.data));
           this.$globalData.userInfo = res.data;
-          this.$router.push('home');
+          this.$router.push({name:'Home',params:{getStar:res.msg=='登陆成功，并赠送两个星辰'?true:false}});
         }
       })
     }

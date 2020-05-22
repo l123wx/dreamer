@@ -42,6 +42,12 @@ export default {
       this.dreamId = id;
       this.dreamTitle = title
     }
+  },
+  created() {
+    if( this.$route.params.dreamId ) {
+      this.dreamId = this.$route.params.dreamId;
+      this.startReveal();
+    }
   }
 }
 </script>

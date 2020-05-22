@@ -15,7 +15,12 @@
         </div>
         <div class="center">{{item.content|spaceAndEnter}}</div>
         <div class="footer">
-          <div class="date">{{item.dreamTime | yyyy.mm.dd}}<span v-if="!item.isPublic" class="iconfont">&#xe600;</span></div>
+          <div class="date">{{item.dreamTime | yyyy.mm.dd}}
+            <span v-if="item.isPublic==0" class="iconfont">&#xe600;</span>
+            <span v-if="item.isPublic==2" 
+                  class="iconfont"
+                  style="color:#c2c2c2">审核中</span>
+          </div>
           <div class="time">{{item.dreamTime | timeWord}}</div>
         </div>
       </div>
@@ -79,6 +84,7 @@ export default {
     flex-wrap:wrap;
     display: flex;
     justify-content:space-between;
+    align-content: flex-start
   }
   .cardView .dream_box{
     width:2.54rem;
@@ -88,6 +94,8 @@ export default {
     margin-top:.18rem;
     color:#000;
     padding:.44rem .28rem;
+    vertical-align: top;
+    display: inline-block;
   }
   .cardView .dream_box>.title{
     font-size: .3rem;

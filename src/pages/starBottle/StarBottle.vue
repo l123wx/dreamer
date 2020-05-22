@@ -19,7 +19,7 @@
             <div>每日登陆</div>
             <div>+2星辰</div>
           </div>
-          <div class="active">已签到</div>
+          <div class="active">已领取</div>
         </div>
         <div class="getStar_task">
           <div>

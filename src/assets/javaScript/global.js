@@ -21,7 +21,7 @@ const homeDreamLists = {
           id: 0,
           // src: './static/images/home/photo_1.png',
           src: photoSrcStatic+'home/photo_1.png',
-          title: '酣酣美梦',
+          title: '酣甜美梦',
           title_sec: '存放令人心情愉悦满足的梦',
           sentence: '人生有许多事情,正如船后的波纹,总要过后才觉得美的。',
           bgColor: 'linear-gradient(-13deg, rgb(195,228,255),rgb(252,208,226))',

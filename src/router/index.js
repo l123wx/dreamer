@@ -2,8 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // 欢迎页
 import Index from '@/pages/index/Index'
+// 新手引导页
+import UserGuide from '@/pages/userGuide/UserGuide'
 // 登陆页
 import LoginAndRegister from '@/pages/loginAndRegister/LoginAndRegister'
+// 用户协议
+import Agreement from '@/pages/agreement/Agreement'
 // 主页
 import Home from '@/pages/home/Home'
 // 梦境列表页
@@ -29,6 +33,10 @@ import DreamRevealerIng from '@/pages/revealDream/DreamRevealerIng'
 //系统公告
 import Notice from '@/pages/notice/Notice'
 import NoticeDetails from '@/pages/notice/NoticeDetails'
+// 后台登陆
+import BackstageLogin from '@/pages/backstageLogin/BackstageLogin'
+// 解梦师后台
+import DreamMaster from '@/pages/dreamMaster/DreamMaster'
 Vue.use(Router)
 
 export default new Router({
@@ -104,5 +112,21 @@ export default new Router({
     path: '/NoticeDetails',
     name: 'NoticeDetails',
     component: NoticeDetails
+  }, {
+    path: '/DreamMaster',
+    name: 'DreamMaster',
+    component: DreamMaster
+  }, {
+    path: '/BackstageLogin',
+    name: 'BackstageLogin',
+    component: BackstageLogin
+  }, {
+    path: '/Agreement',
+    name: 'Agreement',
+    component: Agreement
+  }, {
+    path: '/UserGuide',
+    name: 'UserGuide',
+    component: UserGuide
   }]
 })

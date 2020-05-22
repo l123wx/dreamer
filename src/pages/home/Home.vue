@@ -35,7 +35,8 @@ import HomeNav from './components/Nav'
 import HomeTitle from './components/Title'
 import HomeOverlay from '@/components/Overlay'
 import HomeMenu from './components/Menu'
-import { get_dream_list,get_user_info } from '@/assets/javaScript/_axios'
+import { Dialog } from 'vant'
+import { get_dream_list,get_user_info,user_guide_check } from '@/assets/javaScript/_axios'
 export default {
   name: 'Home',
   components: {
@@ -121,6 +122,15 @@ export default {
     },
     menuListClick(e) {
       this.$router.push(this.menuLists[e].path);
+    },
+    //判断是否显示用户指引
+    ifShowGuide() {
+      user_guide_check({
+      }).then(res=>{
+        if( res.msg == "需要指引" ){
+          this.$router.push({name:'UserGuide'})
+        }
+      })
     }
   },
   mounted(){
@@ -140,6 +150,17 @@ export default {
     this.title = this.list[0].title;
     this.title_sec = this.list[0].title_sec
     this.sentence = this.list[0].sentence
+
+    this.ifShowGuide();
+
+    console.log(this.$route.params.getStar)
+    if(this.$route.params.getStar) {
+      Dialog.alert({
+        message: '每日登陆，星辰+2',
+      }).then(() => {
+        // on close
+      });
+    }
   }
 }
 

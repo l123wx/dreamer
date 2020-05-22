@@ -8,7 +8,9 @@
       <img class="star" :src="photoSrc+'star.png'" />
       <img :src="photoSrc+'dreamWorld/boundary_r.png'" />
     </div>
-    <div class="message_box" @click="focus_textarea">
+    <div class="message_box" 
+         @click="focus_textarea"
+         :style="typePage=='read'?'height: calc(100vh - 10.4rem)':''">
       <field v-model="message" 
              type="textarea"
              autosize
@@ -114,13 +116,12 @@ export default {
 <style lang="css" scoped>
   .box{
     text-align: center;
-    height:calc(100vh - 2.94rem);
+    /*height: calc(100vh - 3.24rem);*/
     background-color: #fff;
     width:5.3rem;
-    margin:0 auto;
-    border-top-left-radius: .19rem; 
-    border-top-right-radius: .19rem; 
-    padding:.6rem .74rem 0;
+    margin:0 auto .2rem;
+    border-radius: .19rem;
+    padding:.6rem .74rem .1rem;
   }
   .title{
     text-align: center;
@@ -144,8 +145,8 @@ export default {
     margin: 0 .06rem;
   }
   .message_box{
-    height:calc(100vh - 2.94rem - 1.54rem);
-    margin-top:.32rem;
+    height: calc(100vh - 5.07rem);
+    margin:.32rem;
     /*background-color: red;*/
     overflow: auto;
     color: #a0a0a0;

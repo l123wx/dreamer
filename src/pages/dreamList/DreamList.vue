@@ -37,6 +37,7 @@
                   @select="clockOnSelect" 
                   cancel-text="取消"
                   :round="false"
+                  description="隐私设置"
                   close-on-click-action/>
   </div>
 </template>

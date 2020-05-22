@@ -3,7 +3,7 @@
     <!-- 标题 -->
     <div class="header">梦境已记录</div>
     <!-- 获取星辰提示 -->
-    <div class="getStar">
+    <div class="getStar" v-if="ifGetStar">
       获得星辰
       <img :src="photoSrc+'star.png'" />
       x2
@@ -24,6 +24,7 @@
 
     <div class="buttons">
       <div @click="toDreamsWorld"><span class="iconfont">&#xe630;</span>进入梦世界</div>
+      <div @click="toRevealDreams"><span class="iconfont">&#xe62d;</span>立刻解梦</div>
       <div @click="toHome"><span class="iconfont">&#xe64e;</span>返回首页</div>
     </div>
   </div>
@@ -45,6 +46,7 @@ export default {
       loading: false,
       dreamId: this.$route.params.dreamId,
       photoSrc: this.$globalData.photoSrc,
+      ifGetStar: 0,
     }
   },
   methods: {
@@ -61,7 +63,11 @@ export default {
             dreamId:this.dreamId,
             type:1
           }).then(res=>{
-            Notify({ type: 'success', message: '已公开' });
+            if(res.msg=="操作成功"){
+              Notify({ type: 'success', message: '已'+(type==0?'隐藏':'公开') });
+            }else if(res.msg=='正在审核'){
+              Notify({ type: 'success', message: '已提交至人工审核'});
+            }
             that.loading = false;
           })
         },
@@ -86,6 +92,9 @@ export default {
     },
     toHome() {
       location.hash = '/home';
+    },
+    toRevealDreams() {
+      this.$router.push({name:'AutoRevealDream',params:{dreamId:this.dreamId}})
     }
   },
   mounted() {
@@ -94,6 +103,10 @@ export default {
       // console.log(res)
       this.$globalData.userInfo = res.data
     })
+    console.log(this.$route.params.msg)
+    if(this.$route.params.msg == '梦境发布成功，获得两个星辰') {
+      this.ifGetStar = 1;
+    }
   }
 }
 </script>
@@ -170,8 +183,10 @@ export default {
     background-color: #b4a8d5;
     color:#fff;
   }
-  .buttons>div:nth-child(2){
+  .buttons>div:nth-child(2),
+  .buttons>div:nth-child(3){
     background-color: #fff;
     color:#7a7a7a;
   }
+
 </style>

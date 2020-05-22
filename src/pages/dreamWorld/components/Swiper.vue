@@ -98,6 +98,9 @@
               {{item.dreamTime | yyyy.mm.dd}}&nbsp;
               {{item.dreamTime | timeWord}}
             </div>
+            <div class="type">
+              来自游记《{{item.type | dreamType}}》
+            </div>
           </div>
         </div>
       </swiper-slide>
@@ -303,6 +306,7 @@ export default {
     text-align: left;
     display: flex;
     justify-content:space-between;
+    position:relative;
   }
   .footer>div{
     display: inline-block;
@@ -317,6 +321,14 @@ export default {
   }
   .footer>.time{
 
+  }
+  .footer>.type {
+    position:absolute;
+    right:0;
+    bottom:-.5rem;
+    width: auto;
+    height: auto;
+    line-height: unset;
   }
   // 继续探索页
   .addDream{

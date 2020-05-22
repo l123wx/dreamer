@@ -45,6 +45,11 @@
         <span class="iconfont">&#xe656;</span>
         <span class="iconfont">&#xe650;</span>
       </li>
+      <li @click="userGuide">
+        使用帮助
+        <span class="iconfont">&#xe615;</span>
+        <span class="iconfont">&#xe650;</span>
+      </li>
     </ul>
     <ul>
       <li @click="logOut">
@@ -158,6 +163,10 @@ export default {
     about() {
       // console.log("about")
       this.$emit('about')
+    },
+    // 使用帮助
+    userGuide() {
+      this.$router.push({name:'UserGuide'})
     },
     // 退出登录
     logOut(){

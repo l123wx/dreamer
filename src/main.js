@@ -81,6 +81,15 @@ Vue.filter('spaceAndEnter', function (value) {
   return value = value.replace(/\<br\/\>/g,"\n");
   // return value;
 })
+Vue.filter('dreamType', function (value) {
+  switch(value){
+    case 1: return '酣甜美梦';
+    case 2: return '梦魇';
+    case 3: return '混沌之初';
+    case 4: return '昨日重现';
+    case 5: return '光怪陆离';
+  }
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
