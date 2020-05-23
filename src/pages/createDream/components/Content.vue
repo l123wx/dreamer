@@ -9,8 +9,7 @@
       <img :src="photoSrc+'dreamWorld/boundary_r.png'" />
     </div>
     <div class="message_box" 
-         @click="focus_textarea"
-         :style="typePage=='read'?'height: calc(100vh - 10.4rem)':''">
+         @click="focus_textarea">
       <field v-model="message" 
              type="textarea"
              autosize
@@ -28,6 +27,64 @@
              :audioSrc="item.src"
              ref="vedio"
              @deleteVedio="deleteVedio(index)"/>
+      </div>
+      <!-- 感想 -->
+      <div class="evaluate" v-if="typePage=='read'">
+        <div style="color:#959595">大家对这个梦的感想</div>
+        <div class="progress_bar">
+          <!-- 选项 -->
+          <div>
+            <div class="star">
+              <img :src="photoSrc+'star-bf.png'" />
+            </div>
+            <div>
+              <div :style="{'width':dreamData.commentOneCount*1/(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)*100+'%'}"></div>
+              <span>真是个有趣的梦</span>
+              <span>
+                {{(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)==0?0:(dreamData.commentOneCount*1/(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)*100+" ").substr(0,4)}}%
+              </span>
+            </div>
+          </div>
+          <!-- 选项 -->
+          <div>
+            <div class="star">
+              <img :src="photoSrc+'star-bf.png'" />
+            </div>
+            <div>
+              <div :style="{'width':dreamData.commentTwoCount*1/(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)*100+'%'}"></div>
+              <span>摸摸头</span>
+              <span>
+                {{(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)==0?0:(dreamData.commentTwoCount*1/(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)*100+" ").substr(0,4)}}%
+              </span>
+            </div>
+          </div>
+          <!-- 选项 -->
+          <div>
+            <div class="star">
+              <img :src="photoSrc+'star-bf.png'" />
+            </div>
+            <div>
+              <div :style="{'width':dreamData.commentThreeCount*1/(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)*100+'%'}"></div>
+              <span>这个梦好奇葩</span>
+              <span>
+                {{(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)==0?0:(dreamData.commentThreeCount*1/(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)*100+" ").substr(0,4)}}%
+              </span>
+            </div>
+          </div>
+          <!-- 选项 -->
+          <div>
+            <div class="star">
+              <img :src="photoSrc+'star-bf.png'" />
+            </div>
+            <div>
+              <div :style="{'width':dreamData.commentFourCount*1/(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)*100+'%'}"></div>
+              <span>做过类似的梦</span>
+              <span>
+                {{(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)==0?0:(dreamData.commentFourCount*1/(dreamData.commentOneCount+dreamData.commentTwoCount+dreamData.commentThreeCount+dreamData.commentFourCount)*100+" ").substr(0,4)}}%
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -118,10 +175,10 @@ export default {
     text-align: center;
     /*height: calc(100vh - 3.24rem);*/
     background-color: #fff;
-    width:5.3rem;
+    width:5.4rem;
     margin:0 auto .2rem;
     border-radius: .19rem;
-    padding:.6rem .74rem .1rem;
+    padding:.6rem .64rem .1rem;
   }
   .title{
     text-align: center;
@@ -146,13 +203,62 @@ export default {
   }
   .message_box{
     height: calc(100vh - 5.07rem);
-    margin:.32rem;
+    margin:.32rem 0;
     /*background-color: red;*/
     overflow: auto;
     color: #a0a0a0;
     font-size: .26rem;
   }
   .textarea{
-    /*min-height: calc(100vh - 2.94rem - 1.54rem);*/
+    min-height: calc(100vh - 9.7rem);
+  }
+  /*感想*/
+  .evaluate{
+    text-align: left;
+    padding: .3rem 0;
+    width: 5.3rem;
+    margin: 0 auto;
+    border-radius: .19rem;
+    background-color: #fff;
+  }
+  .progress_bar{
+    margin-top: .1rem;
+  }
+  .progress_bar>div{
+    display: flex;
+    height: .7rem;
+    justify-content: space-between;
+    margin-top: .24rem;
+  }
+  .progress_bar .star{
+    line-height: .7rem
+    /*margin-right*/
+  }
+  .progress_bar .star>img{
+    height: .46rem;
+  }
+  .progress_bar .star+div{
+    width: 4.02rem;
+    height: .66rem;
+    line-height: .7rem;
+    border:2px solid #b4a8d5;
+    border-radius: .15rem;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 0 .22rem;
+  }
+  .progress_bar .star+div>div{
+    position: absolute;
+    left:0;
+    width:0;
+    height:100%;
+    background-color: #f0eef7;
+    border-radius: .15rem;
+    transition: width .5s;
+  }
+  .progress_bar .star+div>span{
+    position: relative;
+    z-index: 1;
   }
 </style>

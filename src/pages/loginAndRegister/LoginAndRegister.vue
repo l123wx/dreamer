@@ -2,6 +2,10 @@
   <div :class="['box',isSafari?'isSafari':'']">
     <img :src="photoSrc+'login/logo.png'" />
     <login />
+    <!-- 用户协议提示 -->
+    <div class="tip">
+      注册即代表您同意<span @click="toAgreement" data-type="0">用户协议</span>和<span @click="toAgreement" data-type="1">隐私协议</span>
+    </div>
   </div>
 </template>
 
@@ -68,5 +72,19 @@ export default {
     height:2.72rem;
     margin-top: 1.43rem;
     margin-bottom:.7rem;
+  }
+  /*用户协议提示*/
+  .tip {
+    text-align: center;
+    position: fixed;
+    /*bottom: 100px;*/
+    font-size: .24rem;
+    color: #999699;
+    width: 100%;
+    bottom: .7rem;
+
+  }
+  .tip>span {
+    color: #d5c697;
   }
 </style>
