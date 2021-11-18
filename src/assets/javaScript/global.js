@@ -5,10 +5,10 @@ if(localStorage.getItem('token')){
 }
 
 // 图片地址
-// const photoSrcStatic = './static/images/'//本地
-const photoSrcStatic = 'https://mjlr-file.smtboy.com/'//服务器
-// const photoSrc = './static/images/'//本地
-const photoSrc = 'https://mjlr-file.smtboy.com/'//服务器
+const photoSrcStatic = './static/images/'//本地
+// const photoSrcStatic = 'http://mjlr-file.smtboy.com/'//服务器
+const photoSrc = './static/images/'//本地
+// const photoSrc = 'http://mjlr-file.smtboy.com/'//服务器
 
 // 用户的个人信息
 let userInfo = {};

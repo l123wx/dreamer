@@ -24,7 +24,9 @@ export default {
     Login,
   },
   methods: {
-    
+    toAgreement(e) {
+      this.$router.push({name:'Agreement',params:{type:e.target.dataset.type}})
+    }
   },
   mounted(){
     if(this.$globalData.token){
@@ -76,13 +78,18 @@ export default {
   /*用户协议提示*/
   .tip {
     text-align: center;
-    position: fixed;
+    position: absolute;
     /*bottom: 100px;*/
     font-size: .24rem;
     color: #999699;
     width: 100%;
     bottom: .7rem;
 
+  }
+  @media (max-height: 500px) { 
+    .tip {
+      display: none;
+    }
   }
   .tip>span {
     color: #d5c697;
