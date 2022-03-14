@@ -10,4 +10,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+  #app {
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+  }
+</style>

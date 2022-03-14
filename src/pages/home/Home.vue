@@ -156,7 +156,7 @@ export default {
     console.log(this.$route.params.getStar)
     if(this.$route.params.getStar) {
       Dialog.alert({
-        message: '每日登陆，星辰+2',
+        message: '每日登录，星辰+2',
       }).then(() => {
         // on close
       });

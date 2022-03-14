@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height:100vh">
     <!-- 背景图 -->
     <img class="bg" :src="photoSrc+'dreamWorld/photo.jpg'" />
     <div class="header">

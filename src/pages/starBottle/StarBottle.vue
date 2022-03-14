@@ -16,7 +16,7 @@
       <div class="center">
         <div class="getStar_task">
           <div>
-            <div>每日登陆</div>
+            <div>每日登录</div>
             <div>+2星辰</div>
           </div>
           <div class="active">已领取</div>

@@ -66,7 +66,9 @@ export default {
 <style lang="css" scoped>
   .content>div:not(.loadMore){
     min-height: calc(100vh - 1.04rem - 1.28rem - 1.4rem);
-    padding:0 .5rem 0.5rem;
+    /* padding:0 .5rem 0.5rem; */
+    margin: 0 auto;
+    max-width: 6.5rem;
   }
   .content>div:not(.loadMore).isSafari{
     min-height: calc(100vh - 1.04rem - 1.28rem - 1.4rem - 75px);

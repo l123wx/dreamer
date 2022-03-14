@@ -28,9 +28,9 @@
         <div class="button" @click="sendCodeClick">{{codeBtn}}</div>
       </div>
     </div>
-    <div class=button @click="login_or_register">{{pageType=='register'?'注册':'登陆'}}</div>
+    <div class=button @click="login_or_register">{{pageType=='register'?'注册':'登录'}}</div>
     <div class="switch_btn">
-      <span @click="typeSwitch">立即{{pageType=='register'?'登陆':'注册'}}</span>
+      <span @click="typeSwitch">立即{{pageType=='register'?'登录':'注册'}}</span>
     </div>
   </div>
 </template>
@@ -149,7 +149,7 @@ export default {
         }).then(res=>{
           if(res.status == 0){
             Toast.clear();
-            Toast.success((this.pageType=='login'?'登陆':'注册')+'成功');
+            Toast.success((this.pageType=='login'?'登录':'注册')+'成功');
             localStorage.setItem('token',res.data.token);
             this.$globalData.token = res.data.token;
             // localStorage.setItem('userInfo',JSON.stringify(res.data));

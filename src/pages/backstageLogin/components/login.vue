@@ -18,7 +18,7 @@
                            maxlength="11" />
       </div>
     </div>
-    <div class=button @click="backstageLogin">登陆后台</div>
+    <div class=button @click="backstageLogin">登录后台</div>
   </div>
 </template>
 
@@ -64,7 +64,7 @@ export default {
       }).then(res=>{
         if(res.status == 0){
           Toast.clear();
-          Toast.success('登陆成功');
+          Toast.success('登录成功');
           localStorage.setItem('token',res.data.token);
           localStorage.setItem('username',res.data.username);
           this.$globalData.token = res.data.token;

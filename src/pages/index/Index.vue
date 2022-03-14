@@ -34,14 +34,14 @@ export default {
     
   },
   created(){
-    if( this.swidth <= 1024 ) {
+    // if( this.swidth <= 1024 ) {
       this.isMobile = true;
       setTimeout(function() {
         that.$router.push("/loginAndRegister");
       },3000)
-    } else {
-      this.isMobile = false
-    }
+    // } else {
+      // this.isMobile = false
+    // }
   },
   computed:{
     typeNum: {

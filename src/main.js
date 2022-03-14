@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import fastClick from 'fastclick'
+// import fastClick from 'fastclick'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import globalData from '@/assets/javaScript/global.js'
 import 'styles/reset.css'
@@ -14,7 +14,7 @@ import 'swiper/dist/css/swiper.css'
 import Mui from 'vue-awesome-mui';
 
 Vue.config.productionTip = false;
-fastClick.attach(document.body); // 使用fastclick
+// fastClick.attach(document.body); // 使用fastclick
 Vue.use(VueAwesomeSwiper);
 Vue.prototype.$globalData = globalData; //全局变量
 Vue.use(Mui);

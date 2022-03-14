@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 100%; height: 100vh; position: relative">
     <img :class="imgType" :src="photoSrc+'revealDream/indexBg.png'" />
     <div class="header">
       <span class="iconfont" @click="backClick">&#xe650;</span>
